@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../service/app"], function (require, exports, artiste_1, app_1) {
+define(["require", "exports", "artiste", "../service/app", "tools/directive/href"], function (require, exports, artiste_1, app_1, href_1) {
     "use strict";
     exports.__esModule = true;
     var INiveau = /** @class */ (function () {
@@ -44,7 +44,11 @@ define(["require", "exports", "artiste", "../service/app"], function (require, e
                     "[data-id=content]": function (niveauView) { return artiste_1.each(function () {
                         return niveauView.observable.data.map(function (d) {
                             return {
-                                "this": artiste_1.attr(function () { return { href: "/#/play/" + d.id, done: d.score > 0 ? 'true' : 'false' }; }),
+                                "this": [artiste_1.attr(function () {
+                                        return {
+                                            done: d.score > 0 ? 'true' : 'false'
+                                        };
+                                    }), href_1.href(function () { return "/#/play/" + d.id; })],
                                 "[data-id=label]": artiste_1.text(function () { return "" + d.number; }),
                                 "[data-id=score]": artiste_1.text(function () { return "" + d.score; }),
                                 "[data-id=score-color]": artiste_1.classes(function () { return { won: d.score > 0, wait: d.score <= 0 }; })

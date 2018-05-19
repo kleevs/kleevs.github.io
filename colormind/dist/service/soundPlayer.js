@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
+define(["require", "exports", "artiste", "router"], function (require, exports, artiste_1, router_1) {
     "use strict";
     exports.__esModule = true;
     var ISoundPlayer = /** @class */ (function () {
@@ -34,8 +34,9 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
     exports.ISoundPlayer = ISoundPlayer;
     var SoundPlayer = /** @class */ (function (_super) {
         __extends(SoundPlayer, _super);
-        function SoundPlayer() {
+        function SoundPlayer(router) {
             var _this = _super.call(this) || this;
+            _this.router = router;
             _this._sound = {};
             _this.load(ISoundPlayer.Keys.Win, "win.mp3");
             _this.load(ISoundPlayer.Keys.Tap, "tap.wav");
@@ -46,7 +47,7 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
         SoundPlayer.prototype.load = function (key, src, option) {
             var audio = new Audio(), source = document.createElement('source');
             source.type = 'audio/mpeg';
-            source.src = "/dist/content/sound/" + src;
+            source.src = this.router.getUrl("/dist/content/sound/" + src);
             audio.appendChild(source);
             audio.loop = option && option.loop;
             this._sound[key] = audio;
@@ -62,7 +63,7 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
             artiste_1.Service({
                 key: ISoundPlayer
             }),
-            __metadata("design:paramtypes", [])
+            __metadata("design:paramtypes", [router_1.IRouter])
         ], SoundPlayer);
         return SoundPlayer;
     }(ISoundPlayer));

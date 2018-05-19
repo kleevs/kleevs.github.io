@@ -14,7 +14,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define(["require", "exports", "artiste", "tools/directive/href"], function (require, exports, artiste_1, href_1) {
     "use strict";
     exports.__esModule = true;
     var IHome = /** @class */ (function () {
@@ -25,14 +28,23 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
     exports.IHome = IHome;
     var Home = /** @class */ (function (_super) {
         __extends(Home, _super);
-        function Home() {
-            return _super !== null && _super.apply(this, arguments) || this;
+        function Home(observablizer) {
+            var _this = _super.call(this) || this;
+            _this.observable = observablizer.convert({
+                niveau1: "/#/niveau/1", niveau2: "/#/niveau/2", niveau3: "/#/niveau/3"
+            });
+            return _this;
         }
         Home = __decorate([
             artiste_1.View({
                 template: "dist/template/home.html",
-                binding: {}
-            })
+                binding: {
+                    "[data-id=niveau1]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau1; }); },
+                    "[data-id=niveau2]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau2; }); },
+                    "[data-id=niveau3]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau3; }); }
+                }
+            }),
+            __metadata("design:paramtypes", [artiste_1.IObservablizer])
         ], Home);
         return Home;
     }(IHome));

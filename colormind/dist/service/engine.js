@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "imageLoader", "factory", "app", "soundPlayer"], function (require, exports, artiste_1, imageLoader_1, factory_1, app_1, soundPlayer_1) {
+define(["require", "exports", "artiste", "imageLoader", "factory", "app", "soundPlayer", "router"], function (require, exports, artiste_1, imageLoader_1, factory_1, app_1, soundPlayer_1, router_1) {
     "use strict";
     exports.__esModule = true;
     var IEngine = /** @class */ (function () {
@@ -32,13 +32,14 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
     exports.IEngine = IEngine;
     var Engine = /** @class */ (function (_super) {
         __extends(Engine, _super);
-        function Engine(imageLoader, factory, router, app, notifier) {
+        function Engine(imageLoader, factory, router, app, notifier, customRouter) {
             var _this = _super.call(this) || this;
             _this.imageLoader = imageLoader;
             _this.factory = factory;
             _this.router = router;
             _this.app = app;
             _this.notifier = notifier;
+            _this.customRouter = customRouter;
             return _this;
         }
         Engine.prototype.create = function (id, level) {
@@ -160,7 +161,7 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                 };
                 var next = function () {
                     _this.app.saveNiveau(id, score);
-                    _this.router.trigger("/#/play/" + ++id);
+                    _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
                 };
                 return {
                     getSprites: function () { return sprites; },
@@ -185,7 +186,8 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                 factory_1.IFactory,
                 artiste_1.IRouter,
                 app_1.IApp,
-                artiste_1.INotifier])
+                artiste_1.INotifier,
+                router_1.IRouter])
         ], Engine);
         return Engine;
     }(IEngine));

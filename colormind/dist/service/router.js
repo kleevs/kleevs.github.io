@@ -17,42 +17,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "router"], function (require, exports, artiste_1, router_1) {
+define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
     "use strict";
     exports.__esModule = true;
-    var IImageLoader = /** @class */ (function () {
-        function IImageLoader() {
+    var IRouter = /** @class */ (function () {
+        function IRouter() {
         }
-        return IImageLoader;
+        return IRouter;
     }());
-    exports.IImageLoader = IImageLoader;
-    var ImageLoader = /** @class */ (function (_super) {
-        __extends(ImageLoader, _super);
-        function ImageLoader(router) {
+    exports.IRouter = IRouter;
+    var Router = /** @class */ (function (_super) {
+        __extends(Router, _super);
+        function Router(configManager) {
             var _this = _super.call(this) || this;
-            _this.router = router;
+            _this.configManager = configManager;
             return _this;
         }
-        ImageLoader.prototype.load = function (names) {
-            var _this = this;
-            return Promise.all(names.map(function (src) { return _this.loadImage(src); }));
+        Router.prototype.getUrl = function (uri) {
+            var configuration = this.configManager.getConfig();
+            var url = uri;
+            if (configuration && configuration.path) {
+                configuration.path.some(function (path) {
+                    if (url.match(path.test)) {
+                        url = url.replace(path.test, path.result);
+                        return true;
+                    }
+                });
+            }
+            return url;
         };
-        ImageLoader.prototype.loadImage = function (src) {
-            var _this = this;
-            return new Promise(function (resolve) {
-                var img = new Image();
-                img.src = _this.router.getUrl("/dist/content/imgs/" + src + ".png");
-                img.onload = function () {
-                    resolve(img);
-                };
-            });
-        };
-        ImageLoader = __decorate([
+        Router = __decorate([
             artiste_1.Service({
-                key: IImageLoader
+                key: IRouter
             }),
-            __metadata("design:paramtypes", [router_1.IRouter])
-        ], ImageLoader);
-        return ImageLoader;
-    }(IImageLoader));
+            __metadata("design:paramtypes", [artiste_1.IConfigManager])
+        ], Router);
+        return Router;
+    }(IRouter));
 });
