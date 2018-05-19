@@ -27,9 +27,6 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
                 var context = element.getContext('2d');
                 return function () {
                     var items = observable.currentSprites;
-                    if (!items) {
-                        console.log("ok");
-                    }
                     var offset = {
                         x: parseInt(element.getAttribute("offsetx")) || 0,
                         y: parseInt(element.getAttribute("offsety")) || 0
