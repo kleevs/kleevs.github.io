@@ -82,6 +82,7 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 _this.observable.score = game.getScore();
                 _this.observable.backNumber = game.getBackNumber();
                 _this.observable.cycle = [function () { return game.getSprites(); }];
+                _this.tutotrial(id);
                 game.controller.setSelectedColor(_this.observable.selector);
                 return game;
             });
@@ -127,6 +128,35 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
         };
         Play.prototype.destroy = function () {
             this.listeners.forEach(function (l) { return l.stop(); });
+        };
+        Play.prototype.tuto = function (message) {
+            this.notifier.forEvent(IPlay.Event.Modal).notify(this, {
+                message: message,
+                isMute: this.observable.isMuteSound,
+                callback: function () {
+                }
+            });
+        };
+        Play.prototype.tutotrial = function (id) {
+            // tuto
+            if (id === 1) {
+                this.tuto("Placez le bloc bleu dans le cadre de la même couleur en faisant glisser votre doigt sur l'écran.");
+            }
+            if (id === 3) {
+                this.tuto("Placez chaque bloc dans le cadre correspondant. Sélectionnez la couleur du bloc à déplacer à l'aide du bouton situé en haut à droite de l'écran ou cliquez directement sur le bloc.");
+            }
+            if (id === 2) {
+                this.tuto("Si vous faites un mauvais déplacement, vous pouvez revenir en arrière à l'aide du bouton situé en bas à gauche de l'écran.");
+            }
+            if (id === 12) {
+                this.tuto("Les blocs jaunes se déplacent lorsqu'ils sont percutés et déplacent les blocs qu'ils percutent.");
+            }
+            if (id === 21) {
+                this.tuto("Les blocs verts permuttent avec les blocs qu'ils percutent.");
+            }
+            if (id === 51) {
+                this.tuto("Lorqu'une couleur est sélectionnée, tous les blocs de cette couleur se déplacent en même temps.");
+            }
         };
         Play = __decorate([
             artiste_1.View({

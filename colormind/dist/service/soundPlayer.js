@@ -53,11 +53,17 @@ define(["require", "exports", "artiste", "router"], function (require, exports, 
             this._sound[key] = audio;
         };
         SoundPlayer.prototype.play = function (key) {
-            if (this._sound[key].paused)
-                this._sound[key].play();
+            try {
+                if (this._sound[key].paused)
+                    this._sound[key].play();
+            }
+            catch (e) { }
         };
         SoundPlayer.prototype.stop = function (key) {
-            this._sound[key].pause();
+            try {
+                this._sound[key].pause();
+            }
+            catch (e) { }
         };
         SoundPlayer = __decorate([
             artiste_1.Service({

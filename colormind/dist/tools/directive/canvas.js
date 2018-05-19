@@ -8,23 +8,28 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
                 observable = serviceProvider.getService(artiste_1.IObservablizer).convert({ currentSprites: undefined, cycles: [] });
                 return function () {
                     var cycles = cycleAccessor() || [];
-                    setTimeout(function () { return observable.cycles = observable.cycles.concat(cycles); });
-                    routine = routine || setInterval(function () {
-                        if (observable.cycles.length > 0) {
-                            var cycle = observable.cycles.shift();
-                            cycle && (observable.currentSprites = cycle());
-                        }
-                        else {
-                            clearInterval(routine);
-                            routine = undefined;
-                        }
-                    }, 50);
+                    setTimeout(function () {
+                        observable.cycles = observable.cycles.concat(cycles);
+                        routine = routine || setInterval(function () {
+                            if (observable.cycles.length > 0) {
+                                var cycle = observable.cycles.shift();
+                                cycle && (observable.currentSprites = cycle());
+                            }
+                            else {
+                                clearInterval(routine);
+                                routine = undefined;
+                            }
+                        }, 50);
+                    });
                 };
             },
             function (element) {
                 var context = element.getContext('2d');
                 return function () {
                     var items = observable.currentSprites;
+                    if (!items) {
+                        console.log("ok");
+                    }
                     var offset = {
                         x: parseInt(element.getAttribute("offsetx")) || 0,
                         y: parseInt(element.getAttribute("offsety")) || 0

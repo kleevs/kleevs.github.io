@@ -55,23 +55,12 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                 var until = function (callback) {
                     while (!callback()) { }
                 };
-                var save = function () {
-                    savedStates.push(block.map(function (sprite) {
-                        return {
-                            x: sprite.x,
-                            y: sprite.y
-                        };
-                    }));
-                    if (savedStates.length >= 6) {
-                        savedStates.shift();
-                    }
-                };
                 var deplacement = function (vitessex, vitessey) {
                     var movingBlock = block.filter(function (sprite) { return sprite.moving; }).sort(function (a, b) {
-                        return vitessex < 0 && a.x - b.x ||
-                            vitessex > 0 && b.x - a.x ||
-                            vitessey < 0 && a.y - b.y ||
-                            vitessey > 0 && b.y - a.y || 0;
+                        return vitessex < 0 && a.position.x - b.position.x ||
+                            vitessex > 0 && b.position.x - a.position.x ||
+                            vitessey < 0 && a.position.y - b.position.y ||
+                            vitessey > 0 && b.position.y - a.position.y || 0;
                     });
                     var cycles = [];
                     var cont = false;
@@ -110,26 +99,38 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                             }
                             sprite.moving === true && cycles.push(function () {
                                 _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Tap);
-                                return sprites;
                             });
                             sprite.moving = false;
                         }
                     });
-                    return { cycles: cycles, "continue": cont };
+                    return {
+                        cycle: function () { cycles.forEach(function (c) { return c(); }); return sprites; },
+                        "continue": cont,
+                        hasCycle: cycles && cycles.length > 0
+                    };
                 };
                 var move = function (vitessex, vitessey) {
                     if (isfinished)
                         return undefined;
-                    save();
+                    savedStates.push(block.map(function (sprite) {
+                        return {
+                            x: sprite.position.x,
+                            y: sprite.position.y
+                        };
+                    }));
                     block.filter(function (s) { return (s.moving = false) || s.color === selectedColor; })
                         .forEach(function (s) { return s.moving = 'yes'; });
                     var cycles = [];
                     until(function () {
                         var tmp = deplacement(vitessex, vitessey);
-                        cycles = tmp && cycles.concat(tmp.cycles) || cycles;
+                        tmp && tmp.hasCycle && cycles.push(tmp.cycle);
                         return !tmp["continue"];
                     });
                     cycles.length > 0 && score++;
+                    cycles.length <= 0 && savedStates.pop();
+                    if (savedStates.length >= 6) {
+                        savedStates.shift();
+                    }
                     if (finish()) {
                         isfinished = true;
                         cycles.push(function () {
@@ -163,25 +164,6 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                     _this.app.saveNiveau(id, score);
                     _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
                 };
-                // tuto
-                if (id === 1) {
-                    _this.tuto("Placez le bloc bleu dans le cadre de la même couleur en faisant glisser votre doigt sur l'écran.");
-                }
-                if (id === 3) {
-                    _this.tuto("Placez chaque bloc dans le cadre correspondant. Sélectionnez la couleur du bloc à déplacer à l'aide du bouton situé en haut à droite de l'écran ou cliquez directement sur le bloc.");
-                }
-                if (id === 2) {
-                    _this.tuto("Si vous faites un mauvais déplacement, vous pouvez revenir en arrière à l'aide du bouton situé en bas à gauche de l'écran.");
-                }
-                if (id === 12) {
-                    _this.tuto("Les blocs jaunes se déplacent lorsqu'ils sont percutés et déplacent les blocs qu'ils percutent.");
-                }
-                if (id === 21) {
-                    _this.tuto("Les blocs verts permuttent avec les blocs qu'ils percutent.");
-                }
-                if (id === 51) {
-                    _this.tuto("Lorqu'une couleur est sélectionnée, tous les blocs de cette couleur se déplacent en même temps.");
-                }
                 return {
                     getSprites: function () { return sprites; },
                     getScore: function () { return score; },
@@ -195,13 +177,6 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                         back: function () { return back(); }
                     }
                 };
-            });
-        };
-        Engine.prototype.tuto = function (message) {
-            this.notifier.forEvent(IEngine.Event.Modal).notify(this, {
-                message: message,
-                callback: function () {
-                }
             });
         };
         Engine = __decorate([
