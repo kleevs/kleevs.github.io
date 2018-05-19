@@ -1,0 +1,300 @@
+html, body, .body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.screen {
+    width: 100%; 
+    height: 100%; 
+    padding: 0px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-image: url(../imgs/background.png);
+    position: relative;
+}
+
+.screen.play {
+    display: flex;
+    background-image: url(../imgs/level.background.png);
+}
+
+.btn-menu {
+    box-sizing: border-box;
+    margin: 2px 0px;
+    width: 100%;
+}
+
+.btn-niveau {
+    box-sizing: border-box;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 17%;
+    padding: 0px;
+}
+
+.btn-niveau .text {
+    padding-bottom: 1px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 1px;
+}
+
+.canvas {
+    display: block;
+    margin: auto;
+}
+
+#colorselection {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    overflow: hidden;
+    width: 10%;
+    
+    -o-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -khtml-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#colorselection img {
+    width: 100%;
+}
+
+#score {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    overflow: hidden;
+    width: 20%;
+}
+
+.linear {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#back {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    overflow: hidden;
+    width: 10%;
+    background-color: #eef470;
+    
+    -o-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -khtml-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#back img {
+    width: 100%;
+}
+
+#music {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    overflow: hidden;
+    width: 10%;
+    
+    -o-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -khtml-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#music img {
+    width: 100%;
+}
+
+#sound {
+    position: absolute;
+    bottom: 5%;
+    right: 20%;
+    overflow: hidden;
+    width: 10%;
+    
+    -o-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -khtml-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#title {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    overflow: hidden;
+    
+    -o-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -khtml-border-radius: 10%;
+    -webkit-border-radius: 10%;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    
+     transform: translate(-50%, 0%);
+}
+
+#title label {
+    padding: 4px 8px;
+}
+
+#sound img {
+    width: 100%;
+}
+
+#back label {
+    display: block;
+    margin: auto;
+    width: 5px;
+}
+
+.popup-background {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    
+    position: relative;
+    top: -100%;
+    
+    transition: top 1s;
+    -o-transition: top 1s;
+    -moz-transition: top 1s;
+    -ms-transition: top 1s;
+    -khtml-transition: top 1s;
+    -webkit-transition: top 1s;
+}
+
+.popup-content {
+    background-color: white;
+    overflow: hidden;
+    width: 80%;
+    margin: auto;
+    font-size: 150%;
+    
+    position: relative;
+    top: -100%;
+    
+    transition: top 1s;
+    -o-transition: top 1s;
+    -moz-transition: top 1s;
+    -ms-transition: top 1s;
+    -khtml-transition: top 1s;
+    -webkit-transition: top 1s;
+    
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -khtml-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    
+    -o-border-radius: 4%;
+    -moz-border-radius: 4%;
+    -ms-border-radius: 4%;
+    -khtml-border-radius: 4%;
+    -webkit-border-radius: 4%;
+}
+
+.popup-header {
+    border-bottom: 1px solid #aaaaaa;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.popup-body {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-bottom: 1px solid #aaaaaa;
+}
+
+.popup-footer {
+    padding-top: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.popup-btn {
+    width: 100%;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.btn-niveau[done=true] {
+    color: #25b241;
+}
+
+.won {
+   background-color: #25b241; 
+}
+
+.wait {
+   background-color: #aaaaaa; 
+}
+
+.block {
+    display: block;
+}
+
+.btn-default {
+    background-color: #cccccc
+}

@@ -1,0 +1,26 @@
+define(["require", "exports", "artiste", "jquery", "bootstrap"], function (require, exports, artiste_1, $) {
+    "use strict";
+    exports.__esModule = true;
+    function modal(valueAccessor) {
+        return function (element, serviceProvider, m) {
+            return artiste_1.view(function () {
+                var v = valueAccessor();
+                v && serviceProvider.getService(artiste_1.IViewProvider).getNode(v).then(function (e) {
+                    $(e).modal();
+                });
+                return v;
+            })(element, serviceProvider, m);
+        };
+    }
+    exports.modal = modal;
+    function dismiss(valueAccessor) {
+        return function (element) {
+            $(element).on('hidden.bs.modal', function () {
+                var v = valueAccessor();
+                v && v();
+            });
+            return function () { };
+        };
+    }
+    exports.dismiss = dismiss;
+});
