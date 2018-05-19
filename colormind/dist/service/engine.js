@@ -163,6 +163,25 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                     _this.app.saveNiveau(id, score);
                     _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
                 };
+                // tuto
+                if (id === 1) {
+                    _this.tuto("Placez le bloc bleu dans le cadre de la même couleur en faisant glisser votre doigt sur l'écran.");
+                }
+                if (id === 3) {
+                    _this.tuto("Placez chaque bloc dans le cadre correspondant. Sélectionnez la couleur du bloc à déplacer à l'aide du bouton situé en haut à droite de l'écran ou cliquez directement sur le bloc.");
+                }
+                if (id === 2) {
+                    _this.tuto("Si vous faites un mauvais déplacement, vous pouvez revenir en arrière à l'aide du bouton situé en bas à gauche de l'écran.");
+                }
+                if (id === 12) {
+                    _this.tuto("Les blocs jaunes se déplacent lorsqu'ils sont percutés et déplacent les blocs qu'ils percutent.");
+                }
+                if (id === 21) {
+                    _this.tuto("Les blocs verts permuttent avec les blocs qu'ils percutent.");
+                }
+                if (id === 51) {
+                    _this.tuto("Lorqu'une couleur est sélectionnée, tous les blocs de cette couleur se déplacent en même temps.");
+                }
                 return {
                     getSprites: function () { return sprites; },
                     getScore: function () { return score; },
@@ -176,6 +195,13 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                         back: function () { return back(); }
                     }
                 };
+            });
+        };
+        Engine.prototype.tuto = function (message) {
+            this.notifier.forEvent(IEngine.Event.Modal).notify(this, {
+                message: message,
+                callback: function () {
+                }
             });
         };
         Engine = __decorate([

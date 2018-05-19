@@ -46,7 +46,7 @@ define(["require", "exports", "artiste", "../data/leveldata", "database"], funct
             return this.database.load().niveau.filter(function (d) { return d.id === id; })[0];
         };
         App.prototype.getDataById = function (id) {
-            return leveldata_1.data[parseInt("" + id / 50)][id % 50 - 1];
+            return leveldata_1.data[parseInt("" + (id - 1) / 50)][(id - 1) % 50];
         };
         App.prototype.saveNiveau = function (id, score) {
             var data = this.database.load();
