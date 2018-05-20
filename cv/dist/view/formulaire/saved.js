@@ -51,8 +51,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         }
         Saved.prototype.save = function (users) {
             var _this = this;
-            this._personService.save(users);
-            this._personService.search(new person_2.PersonFilter()).then(function (users) { return _this.observable.users = users; });
+            this._personService.save(users).then(function () {
+                _this._personService.search(new person_2.PersonFilter()).then(function (users) { return _this.observable.users = users; });
+            });
         };
         Saved = __decorate([
             artiste_1.View({
