@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "tools/directive/modal", "view/home", "view/niveau", "view/play", "view/modal", "service/soundPlayer"], function (require, exports, artiste_1, modal_1, home_1, niveau_1, play_1, modal_2, soundPlayer_1) {
+define(["require", "exports", "artiste", "view/home", "view/niveau", "view/play", "view/modal", "service/soundPlayer"], function (require, exports, artiste_1, home_1, niveau_1, play_1, modal_1, soundPlayer_1) {
     "use strict";
     exports.__esModule = true;
     var Startup = /** @class */ (function () {
@@ -30,7 +30,7 @@ define(["require", "exports", "artiste", "tools/directive/modal", "view/home", "
                     var playId = parseInt(hash.split("/").pop());
                     var playScreen = viewProvider.newInstance(play_1.IPlay);
                     notifier.forEvent(play_1.IPlay.Event.Modal).listen(playScreen, function (item) {
-                        var modalView = viewProvider.newInstance(modal_2.IModal);
+                        var modalView = viewProvider.newInstance(modal_1.IModal);
                         modalView.setMessage(item.message);
                         modalView.setCallback(function () {
                             setTimeout(function () { return _this.observable.modal = undefined; });
@@ -59,7 +59,7 @@ define(["require", "exports", "artiste", "tools/directive/modal", "view/home", "
                 template: "dist/template/layout.html",
                 binding: {
                     "[data-id=game]": function (starter) { return artiste_1.view(function () { return starter.observable.view; }); },
-                    "[data-id=modal]": function (starter) { return modal_1.modal(function () { return starter.observable.modal; }); }
+                    "[data-id=modal]": function (starter) { return artiste_1.view(function () { return starter.observable.modal; }); }
                 }
             }),
             __metadata("design:paramtypes", [artiste_1.IObservablizer,

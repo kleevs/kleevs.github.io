@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../service/app", "../service/engine", "../tools/directive/canvas", "../tools/directive/joystick", "../service/soundPlayer", "../service/router", "tools/directive/hide"], function (require, exports, artiste_1, app_1, engine_1, canvas_1, joystick_1, soundPlayer_1, router_1, hide_1) {
+define(["require", "exports", "artiste", "../service/app", "../service/engine", "../tools/directive/canvas", "../tools/directive/joystick", "../service/soundPlayer", "../service/router", "tools/directive/hide", "tools/directive/mousemove"], function (require, exports, artiste_1, app_1, engine_1, canvas_1, joystick_1, soundPlayer_1, router_1, hide_1, mousemove_1) {
     "use strict";
     exports.__esModule = true;
     var IPlay = /** @class */ (function () {
@@ -173,7 +173,10 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                     "#sound": function (playView) { return artiste_1.click(function () { return function () { return playView.muteSound(); }; }); },
                     "#sound [data-id=no]": function (playView) { return hide_1.hide(function () { return !playView.observable.isMuteSound; }); },
                     "#back": function (playView) { return artiste_1.click(function () { return function () { return playView.controller({ cmd: 'BACK' }); }; }); },
-                    "this": function (playView) { return joystick_1.joystick(function () { return function (e) { return playView.controller(e); }; }); },
+                    "this": function (playView) { return [
+                        joystick_1.joystick(function () { return function (e) { return playView.controller(e); }; }),
+                        mousemove_1.mousemove(function () { return function (e) { return playView.controller(e); }; })
+                    ]; },
                     "canvas": function (playView) { return [
                         canvas_1.canvas(function () { return playView.observable.cycle; }),
                         artiste_1.attr(function () {

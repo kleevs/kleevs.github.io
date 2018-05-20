@@ -1,15 +1,11 @@
 define(["require", "exports", "artiste", "jquery", "bootstrap"], function (require, exports, artiste_1, $) {
     "use strict";
     exports.__esModule = true;
-    function modal(valueAccessor) {
+    function modal() {
         var $element;
         return [
             function (element) { $element = $(element); return function () { }; },
-            artiste_1.view(function () {
-                var v = valueAccessor();
-                setTimeout(function () { return $element.children().modal(); });
-                return v;
-            })
+            artiste_1.dom({ "in": function () { return setTimeout(function () { return $element.modal(); }); }, out: function () { } })
         ];
     }
     exports.modal = modal;

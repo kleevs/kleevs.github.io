@@ -44,7 +44,7 @@ define(["require", "exports", "artiste", "tools/directive/modal"], function (req
                 template: "dist/template/modal.html",
                 binding: {
                     "[data-id=message]": function (modal) { return artiste_1.text(function () { return modal.observable.message; }); },
-                    "this": function (modal) { return modal_1.dismiss(function () { return modal.observable.callback; }); }
+                    "this": function (modalView) { return [modal_1.dismiss(function () { return modalView.observable.callback; }), modal_1.modal()]; }
                 }
             }),
             __metadata("design:paramtypes", [artiste_1.IObservablizer])

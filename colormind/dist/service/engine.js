@@ -162,7 +162,9 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
                 };
                 var next = function () {
                     _this.app.saveNiveau(id, score);
-                    _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
+                    setTimeout(function () {
+                        _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
+                    }, 500);
                 };
                 return {
                     getSprites: function () { return sprites; },
