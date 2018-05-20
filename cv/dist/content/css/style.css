@@ -1,0 +1,78 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+}
+
+.img {
+    width: 100%;
+}
+
+.competence {
+    height: 200px;
+    overflow: auto;
+}
+
+.clickable:hover {
+	cursor: pointer;
+	
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+	-moz-box-shadow:    0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+	box-shadow:         0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+}
+
+.clickable[selected] {
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+	-moz-box-shadow:    0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+	box-shadow:         0px 0px 30px 0px rgba(0, 0, 255, 0.67);
+}
+
+.full-width {
+	width: 100%;
+}
+
+.full-screen {
+	width: 100%;
+	height: 100%;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.tree-node:before {
+	content: "\e080";
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	margin-right: 5px;
+}
+
+.tree-node:not(.clickable):before {
+	visibility: hidden;
+}
+
+.tree-node.clickable.tree-open:before {
+	transform: rotate(90deg);
+}
+
+.overflow {
+	overflow: auto;
+}
+
+.has-error {
+	color: #B94A48;
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+}
+
+li {
+	list-style-type:none;
+}
+
+.draggable {
+	user-select: none;
+}
