@@ -92,26 +92,30 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycl
                         to.item.moving = true;
                     }
                     else {
-                        if (current.item.moving === true &&
+                        var tap = current.item.moving === true;
+                        current.item.moving = false;
+                        if (tap &&
                             (to.item.value === 7 ||
                                 (to.item.value === 3 || to.item.value === 5 || to.item.value === 7 || to.item.value === 9)
                                     && current.item.value === 7)) {
                             to.item.moving = 'yes';
                             cont = true;
                         }
-                        if (current.item.moving === true &&
+                        if (tap &&
                             (to.item.value === 9 ||
                                 (to.item.value === 3 || to.item.value === 5 || to.item.value === 7 || to.item.value === 9) &&
                                     current.item.value === 9)) {
-                            var old = { index: current.index, sol: current.sol };
-                            current.index = to.index;
-                            current.sol = to.sol;
-                            to.index = old.index;
-                            to.sol = old.sol;
+                            var old = current.item;
+                            current.item = {
+                                value: to.item.value,
+                                moving: old.moving
+                            };
+                            to.item = {
+                                value: old.value,
+                                moving: to.item.moving
+                            };
                             cont = true;
                         }
-                        var tap = current.item.moving === true;
-                        current.item.moving = false;
                         if (tap) {
                             cont = true;
                             cycles.push(function () {
