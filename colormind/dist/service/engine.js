@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "imageLoader", "factory", "app", "soundPlayer", "router"], function (require, exports, artiste_1, imageLoader_1, factory_1, app_1, soundPlayer_1, router_1) {
+define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycleScheduler"], function (require, exports, artiste_1, app_1, soundPlayer_1, router_1, cycleScheduler_1) {
     "use strict";
     exports.__esModule = true;
     var IEngine = /** @class */ (function () {
@@ -25,172 +25,197 @@ define(["require", "exports", "artiste", "imageLoader", "factory", "app", "sound
         }
         IEngine.Event = {
             Modal: new artiste_1.Event("IEngine.Modal"),
-            Sound: new artiste_1.Event("IEngine.Sound")
+            Sound: new artiste_1.Event("IEngine.Sound"),
+            Cycle: new artiste_1.Event("IEngine.Cycle")
         };
         return IEngine;
     }());
     exports.IEngine = IEngine;
     var Engine = /** @class */ (function (_super) {
         __extends(Engine, _super);
-        function Engine(imageLoader, factory, router, app, notifier, customRouter) {
+        function Engine(router, app, notifier, customRouter, cycleScheduler) {
             var _this = _super.call(this) || this;
-            _this.imageLoader = imageLoader;
-            _this.factory = factory;
             _this.router = router;
             _this.app = app;
             _this.notifier = notifier;
             _this.customRouter = customRouter;
+            _this.cycleScheduler = cycleScheduler;
+            _this.notifier.forEvent(cycleScheduler_1.ICycleScheduler.Event().Cycle).listen(cycleScheduler, function (obj) {
+                _this.notifier.forEvent(IEngine.Event.Cycle).notify(_this, obj);
+            });
             return _this;
         }
         Engine.prototype.create = function (id, level) {
             var _this = this;
-            return this.factory.create(level).then(function (sprites) {
-                var selectedColor = 0;
-                var isfinished = false;
-                var nbcolumn = level.colonne;
-                var nbrow = parseInt("" + level.data.length / level.colonne);
-                var savedStates = [];
-                var score = 0;
-                var block = sprites.filter(function (sprite) { return sprite.block; });
-                var until = function (callback) {
-                    while (!callback()) { }
-                };
-                var deplacement = function (vitessex, vitessey) {
-                    var movingBlock = block.filter(function (sprite) { return sprite.moving; }).sort(function (a, b) {
-                        return vitessex < 0 && a.position.x - b.position.x ||
-                            vitessex > 0 && b.position.x - a.position.x ||
-                            vitessey < 0 && a.position.y - b.position.y ||
-                            vitessey > 0 && b.position.y - a.position.y || 0;
-                    });
-                    var cycles = [];
-                    var cont = false;
-                    movingBlock.forEach(function (sprite) {
-                        var to = block.filter(function (s) { return s.position.x === sprite.position.x + vitessex && s.position.y === sprite.position.y + vitessey; })[0];
-                        if (!to || to.moving) {
-                            (function () {
-                                var s = sprite;
-                                var x = sprite.position.x + vitessex;
-                                var y = sprite.position.y + vitessey;
-                                s.position.x = x;
-                                s.position.y = y;
-                                cont = true;
-                                sprite.moving = true;
-                                cycles.push(function () {
-                                    s.x = x;
-                                    s.y = y;
-                                    return sprites;
-                                });
-                            })();
+            var column = level.colonne;
+            var length = level.data.length;
+            var isfinished = false;
+            var savedStates = [];
+            var score = 0;
+            var selectedColor = 3;
+            var sol = level.data.map(function (n) { return !(n === 1 || n === 2 || n === 3 || n === 5 || n === 7 || n === 9) && {
+                value: n,
+                moving: false
+            } || n !== 1 && {
+                value: 0,
+                moving: false
+            } || undefined; });
+            var scene = level.data.map(function (n) { return (n === 1 || n === 2 || n === 3 || n === 5 || n === 7 || n === 9) && {
+                value: n,
+                moving: false
+            } || undefined; });
+            var until = function (callback) {
+                while (!callback()) { }
+            };
+            var deplacement = function (vitessex, vitessey) {
+                var lgth = length - 1;
+                var cont = false;
+                var cycles = [];
+                var scn = scene.map(function (item, it) {
+                    var origin = vitessex < 0 && it ||
+                        vitessex > 0 && lgth - it ||
+                        vitessey < 0 && (it * column - 1) % lgth + 1 ||
+                        vitessey > 0 && lgth - (it * column + 1) % lgth - 1 ||
+                        0;
+                    return {
+                        index: origin,
+                        item: scene[origin],
+                        sol: sol[origin]
+                    };
+                }).map(function (current, i, arr) {
+                    var to = i > 0 && arr[i - 1] && arr[i - 1];
+                    if (!current.item || !current.item.moving) { }
+                    else if (!to.item) {
+                        to.item = current.item;
+                        current.item = undefined;
+                        cont = true;
+                        to.item.moving = true;
+                    }
+                    else {
+                        if (current.item.moving === true &&
+                            (to.item.value === 7 ||
+                                (to.item.value === 3 || to.item.value === 5 || to.item.value === 7 || to.item.value === 9)
+                                    && current.item.value === 7)) {
+                            to.item.moving = 'yes';
+                            cont = true;
                         }
-                        else {
-                            if (to && sprite.moving === true && (to.color === 2 || to.color >= 0 && sprite.color === 2)) {
-                                to.moving = true;
-                                cont = true;
-                            }
-                            if (to && sprite.moving === true && (to.color === 3 || to.color >= 0 && sprite.color === 3)) {
-                                var old = { value: sprite.value, color: sprite.color, image: sprite.image };
-                                sprite.value = to.value;
-                                sprite.color = to.color;
-                                sprite.image = to.image;
-                                to.value = old.value;
-                                to.color = old.color;
-                                to.image = old.image;
-                                cont = true;
-                            }
-                            sprite.moving === true && cycles.push(function () {
+                        if (current.item.moving === true &&
+                            (to.item.value === 9 ||
+                                (to.item.value === 3 || to.item.value === 5 || to.item.value === 7 || to.item.value === 9) &&
+                                    current.item.value === 9)) {
+                            var old = { index: current.index, sol: current.sol };
+                            current.index = to.index;
+                            current.sol = to.sol;
+                            to.index = old.index;
+                            to.sol = old.sol;
+                            cont = true;
+                        }
+                        var tap = current.item.moving === true;
+                        current.item.moving = false;
+                        if (tap) {
+                            cont = true;
+                            cycles.push(function () {
                                 _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Tap);
                             });
-                            sprite.moving = false;
                         }
-                    });
-                    return {
-                        cycle: function () { cycles.forEach(function (c) { return c(); }); return sprites; },
-                        "continue": cont,
-                        hasCycle: cycles && cycles.length > 0
-                    };
-                };
-                var move = function (vitessex, vitessey) {
-                    if (isfinished)
-                        return undefined;
-                    savedStates.push(block.map(function (sprite) {
-                        return {
-                            x: sprite.position.x,
-                            y: sprite.position.y
-                        };
-                    }));
-                    block.filter(function (s) { return (s.moving = false) || s.color === selectedColor; })
-                        .forEach(function (s) { return s.moving = 'yes'; });
-                    var cycles = [];
-                    until(function () {
-                        var tmp = deplacement(vitessex, vitessey);
-                        tmp && tmp.hasCycle && cycles.push(tmp.cycle);
-                        return !tmp["continue"];
-                    });
-                    cycles.length > 0 && score++;
-                    cycles.length <= 0 && savedStates.pop();
-                    if (savedStates.length >= 6) {
-                        savedStates.shift();
                     }
-                    if (finish()) {
-                        isfinished = true;
-                        cycles.push(function () {
-                            _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Win);
-                            _this.notifier.forEvent(IEngine.Event.Modal).notify(_this, {
-                                message: "R\u00E9ussi !!! " + score + " coups.",
-                                callback: function () {
-                                    next();
-                                }
-                            });
-                            return sprites;
-                        });
-                    }
-                    return cycles;
-                };
-                var back = function () {
-                    if (savedStates.length > 0) {
-                        score--;
-                        savedStates.pop().forEach(function (s, i) {
-                            block[i].x = block[i].position.x = s.x;
-                            block[i].y = block[i].position.y = s.y;
-                        });
-                    }
-                    return [function () { return sprites; }];
-                };
-                var finish = function () {
-                    return !block.filter(function (s) { return s.color >= 0; })
-                        .filter(function (s) { return level.data[s.position.x / 50 + s.position.y / 50 * nbcolumn] !== s.value + 1; })[0];
-                };
-                var next = function () {
-                    _this.app.saveNiveau(id, score);
-                    setTimeout(function () {
-                        _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
-                    }, 500);
-                };
+                    return current;
+                }).sort(function (a, b) { return a.index - b.index; }).map(function (_) { return { item: _.item, sol: _.sol }; });
+                scene = scn.map(function (_) { return _.item; });
                 return {
-                    getSprites: function () { return sprites; },
-                    getScore: function () { return score; },
-                    getBackNumber: function () { return savedStates.length; },
-                    controller: {
-                        setSelectedColor: function (v) { selectedColor = v; },
-                        left: function () { return move(-50, 0); },
-                        up: function () { return move(0, -50); },
-                        right: function () { return move(50, 0); },
-                        down: function () { return move(0, 50); },
-                        back: function () { return back(); }
-                    }
+                    cycle: function () { cycles.forEach(function (c) { return c(); }); return scn; },
+                    "continue": cont
+                };
+            };
+            var finish = function () {
+                return !scene.filter(function (item, i) {
+                    return item && (item.value === 3 || item.value === 5 || item.value === 7 || item.value === 9) &&
+                        item.value + 1 !== level.data[i];
+                })[0];
+            };
+            var getSprites = function () { return scene.map(function (item, i) {
+                return {
+                    item: item,
+                    sol: sol[i]
+                };
+            }); };
+            var next = function () {
+                _this.app.saveNiveau(id, score);
+                setTimeout(function () {
+                    _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
+                }, 500);
+            };
+            var back = function () {
+                if (savedStates.length > 0) {
+                    score--;
+                    scene = savedStates.pop();
+                }
+                var sprites = getSprites();
+                _this.cycleScheduler.push([function () { return sprites; }]);
+            };
+            var move = function (vitessex, vitessey) {
+                if (isfinished)
+                    return undefined;
+                savedStates.push(scene.map(function (item) { return item; }));
+                scene.filter(function (s) { return !!s; }).filter(function (s) { return (s.moving = false) || s.value === selectedColor; }).forEach(function (s) { return s.moving = 'yes'; });
+                var cycles = [];
+                until(function () {
+                    var tmp = deplacement(vitessex, vitessey);
+                    tmp && tmp["continue"] && cycles.push(tmp.cycle);
+                    return !tmp["continue"];
+                });
+                cycles.length > 0 && score++;
+                cycles.length <= 0 && savedStates.pop();
+                if (savedStates.length >= 6) {
+                    savedStates.shift();
+                }
+                if (finish()) {
+                    isfinished = true;
+                    cycles.push(function () {
+                        _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Win);
+                        _this.notifier.forEvent(IEngine.Event.Modal).notify(_this, {
+                            message: "R\u00E9ussi !!! " + score + " coups.",
+                            callback: function () {
+                                next();
+                            }
+                        });
+                        return undefined;
+                    });
+                }
+                _this.cycleScheduler.push(cycles);
+            };
+            // initialisation
+            var init = scene.map(function (item, i) {
+                return {
+                    item: scene[i],
+                    sol: sol[i]
                 };
             });
+            this.cycleScheduler.push([
+                function () { return init; }
+            ]);
+            return {
+                getScore: function () { return score; },
+                getBackNumber: function () { return savedStates.length; },
+                controller: {
+                    setSelectedColor: function (v) { selectedColor = v * 2 + 3; },
+                    left: function () { return move(-50, 0); },
+                    up: function () { return move(0, -50); },
+                    right: function () { return move(50, 0); },
+                    down: function () { return move(0, 50); },
+                    back: function () { return back(); }
+                }
+            };
         };
         Engine = __decorate([
             artiste_1.Service({
                 key: IEngine
             }),
-            __metadata("design:paramtypes", [imageLoader_1.IImageLoader,
-                factory_1.IFactory,
-                artiste_1.IRouter,
+            __metadata("design:paramtypes", [artiste_1.IRouter,
                 app_1.IApp,
                 artiste_1.INotifier,
-                router_1.IRouter])
+                router_1.IRouter,
+                cycleScheduler_1.ICycleScheduler])
         ], Engine);
         return Engine;
     }(IEngine));

@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../service/app", "../service/engine", "../tools/directive/canvas", "../tools/directive/joystick", "../service/soundPlayer", "../service/router", "tools/directive/hide", "tools/directive/mousemove"], function (require, exports, artiste_1, app_1, engine_1, canvas_1, joystick_1, soundPlayer_1, router_1, hide_1, mousemove_1) {
+define(["require", "exports", "artiste", "../service/app", "../service/engine", "../tools/directive/canvas", "../tools/directive/joystick", "../service/soundPlayer", "../service/router", "tools/directive/hide", "tools/directive/mousemove", "service/imageLoader"], function (require, exports, artiste_1, app_1, engine_1, canvas_1, joystick_1, soundPlayer_1, router_1, hide_1, mousemove_1, imageLoader_1) {
     "use strict";
     exports.__esModule = true;
     var IPlay = /** @class */ (function () {
@@ -32,11 +32,12 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
     exports.IPlay = IPlay;
     var Play = /** @class */ (function (_super) {
         __extends(Play, _super);
-        function Play(app, observablizer, engine, notifier, soundPlayer, router) {
+        function Play(app, observablizer, engine, notifier, soundPlayer, imageLoader, router) {
             var _this = _super.call(this) || this;
             _this.app = app;
             _this.engine = engine;
             _this.notifier = notifier;
+            _this.imageLoader = imageLoader;
             _this.router = router;
             _this.color = ['blue', 'red', 'yellow', 'green'];
             _this.avaibleColor = [];
@@ -47,7 +48,7 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 backNumber: 0,
                 indexColor: 0,
                 selector: 0,
-                cycle: undefined,
+                screen: undefined,
                 nbcols: 0,
                 nbrows: 0,
                 isMuteSound: _this.app.getMuteSound()
@@ -62,12 +63,38 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 }),
                 _this.notifier.forEvent(engine_1.IEngine.Event.Sound).listen(engine, function (key) {
                     !_this.observable.isMuteSound && soundPlayer.play(key);
+                }),
+                _this.notifier.forEvent(engine_1.IEngine.Event.Cycle).listen(engine, function (obj) {
+                    _this.loadImage().then(function (images) {
+                        var res = [];
+                        obj && obj.forEach(function (item, i) {
+                            var x = (i % _this.observable.nbcols) * 50;
+                            var y = parseInt("" + i / _this.observable.nbcols) * 50;
+                            item.sol && res.push({
+                                image: images[item.sol.value],
+                                x: x,
+                                y: y,
+                                width: 50,
+                                height: 50,
+                                zindex: 1
+                            });
+                            item.item && res.push({
+                                image: images[item.item.value],
+                                x: x,
+                                y: y,
+                                width: 50,
+                                height: 50,
+                                zindex: 1
+                            });
+                            item.sol;
+                        });
+                        _this.observable.screen = res;
+                    });
                 })
             ];
             return _this;
         }
         Play.prototype.init = function (id, isMute) {
-            var _this = this;
             var data = this.app.getById(id);
             this.isMuteMusic = isMute;
             this.notifier.forEvent(IPlay.Event.MuteMusic).notify(this, isMute);
@@ -78,14 +105,11 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             var level = this.app.getDataById(id);
             this.observable.nbcols = level.colonne;
             this.observable.nbrows = parseInt("" + level.data.length / level.colonne);
-            this.gamePromise = this.engine.create(id, level).then(function (game) {
-                _this.observable.score = game.getScore();
-                _this.observable.backNumber = game.getBackNumber();
-                _this.observable.cycle = [function () { return game.getSprites(); }];
-                _this.tutotrial(id);
-                game.controller.setSelectedColor(_this.observable.selector);
-                return game;
-            });
+            this.game = this.engine.create(id, level);
+            this.observable.score = this.game.getScore();
+            this.observable.backNumber = this.game.getBackNumber();
+            this.tutotrial(id);
+            this.game.controller.setSelectedColor(this.observable.selector);
             this.avaibleColor = level.data
                 .filter(function (d) { return d === 3 || d === 5 || d === 7 || d === 9; })
                 .filter(function (d, pos, arr) { return arr.indexOf(d) === pos; })
@@ -94,10 +118,9 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             this.observable.selector = this.avaibleColor[this.observable.indexColor];
         };
         Play.prototype.changeSelector = function () {
-            var _this = this;
             this.observable.indexColor = (this.observable.indexColor + 1) % this.avaibleColor.length;
             this.observable.selector = this.avaibleColor[this.observable.indexColor];
-            this.gamePromise.then(function (game) { game.controller.setSelectedColor(_this.observable.selector); });
+            this.game.controller.setSelectedColor(this.observable.selector);
             return true;
         };
         Play.prototype.colorUrl = function (color) {
@@ -114,20 +137,33 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             return true;
         };
         Play.prototype.controller = function (e) {
-            var _this = this;
-            this.gamePromise.then(function (game) {
-                _this.observable.cycle = e.cmd === "LEFT" && game.controller.left() ||
-                    e.cmd === "UP" && game.controller.up() ||
-                    e.cmd === "RIGHT" && game.controller.right() ||
-                    e.cmd === "DOWN" && game.controller.down() ||
-                    e.cmd === "BACK" && _this.observable.backNumber > 0 && game.controller.back();
-                _this.observable.score = game.getScore();
-                _this.observable.backNumber = game.getBackNumber();
-            });
+            var game = this.game;
+            e.cmd === "LEFT" && game.controller.left() ||
+                e.cmd === "UP" && game.controller.up() ||
+                e.cmd === "RIGHT" && game.controller.right() ||
+                e.cmd === "DOWN" && game.controller.down() ||
+                e.cmd === "BACK" && this.observable.backNumber > 0 && game.controller.back();
+            this.observable.score = game.getScore();
+            this.observable.backNumber = game.getBackNumber();
             return true;
         };
         Play.prototype.destroy = function () {
             this.listeners.forEach(function (l) { return l.stop(); });
+        };
+        Play.prototype.loadImage = function () {
+            return this.imageLoader.load([
+                "sol",
+                "invisible",
+                "mur",
+                "blue",
+                "sol.blue",
+                "red",
+                "sol.red",
+                "yellow",
+                "sol.yellow",
+                "green",
+                "sol.green"
+            ]);
         };
         Play.prototype.tuto = function (message) {
             this.notifier.forEvent(IPlay.Event.Modal).notify(this, {
@@ -178,7 +214,7 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                         mousemove_1.mousemove(function () { return function (e) { return playView.controller(e); }; })
                     ]; },
                     "canvas": function (playView) { return [
-                        canvas_1.canvas(function () { return playView.observable.cycle; }),
+                        canvas_1.canvas(function () { return playView.observable.screen; }),
                         artiste_1.attr(function () {
                             return {
                                 offsetx: "" + (400 - playView.observable.nbcols * 50) / 2,
@@ -193,6 +229,7 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 engine_1.IEngine,
                 artiste_1.INotifier,
                 soundPlayer_1.ISoundPlayer,
+                imageLoader_1.IImageLoader,
                 router_1.IRouter])
         ], Play);
         return Play;
