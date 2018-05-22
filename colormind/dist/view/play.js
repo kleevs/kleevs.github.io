@@ -147,6 +147,18 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             this.observable.backNumber = game.getBackNumber();
             return true;
         };
+        Play.prototype.click = function (e) {
+            var i = parseInt("" + (e.x + 25) / 50);
+            var j = parseInt("" + (e.y + 25) / 50);
+            var value = this.game.getValue(i, j);
+            var indexColor = this.avaibleColor.indexOf((value - 3) / 2);
+            if (indexColor > -1) {
+                this.observable.indexColor = indexColor;
+                this.observable.selector = this.avaibleColor[this.observable.indexColor];
+                this.game.controller.setSelectedColor(this.observable.selector);
+            }
+            return true;
+        };
         Play.prototype.destroy = function () {
             this.listeners.forEach(function (l) { return l.stop(); });
         };
@@ -220,7 +232,8 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                                 offsetx: "" + (400 - playView.observable.nbcols * 50) / 2,
                                 offsety: "" + (600 - playView.observable.nbrows * 50) / 2
                             };
-                        })
+                        }),
+                        canvas_1.click(function () { return function (e) { return playView.click(e); }; })
                     ]; }
                 }
             }),

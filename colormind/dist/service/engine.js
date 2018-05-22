@@ -201,6 +201,10 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycl
             return {
                 getScore: function () { return score; },
                 getBackNumber: function () { return savedStates.length; },
+                getValue: function (i, j) {
+                    var obj = scene[i + j * column];
+                    return obj && obj.value || undefined;
+                },
                 controller: {
                     setSelectedColor: function (v) { selectedColor = v * 2 + 3; },
                     left: function () { return move(-50, 0); },
