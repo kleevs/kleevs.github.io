@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "router"], function (require, exports, artiste_1, router_1) {
+define(["require", "exports", "artiste", "tools/service/soundPlayer", "url"], function (require, exports, artiste_1, soundPlayer_1, url_1) {
     "use strict";
     exports.__esModule = true;
     var ISoundPlayer = /** @class */ (function () {
@@ -34,9 +34,10 @@ define(["require", "exports", "artiste", "router"], function (require, exports, 
     exports.ISoundPlayer = ISoundPlayer;
     var SoundPlayer = /** @class */ (function (_super) {
         __extends(SoundPlayer, _super);
-        function SoundPlayer(router) {
+        function SoundPlayer(url, soundPlayerService) {
             var _this = _super.call(this) || this;
-            _this.router = router;
+            _this.url = url;
+            _this.soundPlayerService = soundPlayerService;
             _this._sound = {};
             _this.load(ISoundPlayer.Keys.Win, "win.mp3");
             _this.load(ISoundPlayer.Keys.Tap, "tap.wav");
@@ -45,31 +46,19 @@ define(["require", "exports", "artiste", "router"], function (require, exports, 
             return _this;
         }
         SoundPlayer.prototype.load = function (key, src, option) {
-            var audio = new Audio(), source = document.createElement('source');
-            source.type = 'audio/mpeg';
-            source.src = this.router.getUrl("/dist/content/sound/" + src);
-            audio.appendChild(source);
-            audio.loop = option && option.loop;
-            this._sound[key] = audio;
+            this.soundPlayerService.load(key, this.url.sounds + "/" + src, option);
         };
         SoundPlayer.prototype.play = function (key) {
-            try {
-                if (this._sound[key].paused)
-                    this._sound[key].play();
-            }
-            catch (e) { }
+            this.soundPlayerService.play(key);
         };
         SoundPlayer.prototype.stop = function (key) {
-            try {
-                this._sound[key].pause();
-            }
-            catch (e) { }
+            this.soundPlayerService.stop(key);
         };
         SoundPlayer = __decorate([
             artiste_1.Service({
                 key: ISoundPlayer
             }),
-            __metadata("design:paramtypes", [router_1.IRouter])
+            __metadata("design:paramtypes", [url_1.IUrl, soundPlayer_1.ISoundPlayer])
         ], SoundPlayer);
         return SoundPlayer;
     }(ISoundPlayer));

@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../service/app", "../service/engine", "../tools/directive/canvas", "../tools/directive/joystick", "../service/soundPlayer", "../service/router", "tools/directive/hide", "tools/directive/mousemove", "service/imageLoader"], function (require, exports, artiste_1, app_1, engine_1, canvas_1, joystick_1, soundPlayer_1, router_1, hide_1, mousemove_1, imageLoader_1) {
+define(["require", "exports", "artiste", "service/app", "service/engine", "service/imageLoader", "service/soundPlayer", "service/url", "tools/directive/hide", "tools/directive/mousemove", "tools/directive/canvas", "tools/directive/joystick"], function (require, exports, artiste_1, app_1, engine_1, imageLoader_1, soundPlayer_1, url_1, hide_1, mousemove_1, canvas_1, joystick_1) {
     "use strict";
     exports.__esModule = true;
     var IPlay = /** @class */ (function () {
@@ -32,12 +32,13 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
     exports.IPlay = IPlay;
     var Play = /** @class */ (function (_super) {
         __extends(Play, _super);
-        function Play(app, observablizer, engine, notifier, soundPlayer, imageLoader, router) {
+        function Play(app, observablizer, engine, notifier, soundPlayer, imageLoader, url, router) {
             var _this = _super.call(this) || this;
             _this.app = app;
             _this.engine = engine;
             _this.notifier = notifier;
             _this.imageLoader = imageLoader;
+            _this.url = url;
             _this.router = router;
             _this.color = ['blue', 'red', 'yellow', 'green'];
             _this.avaibleColor = [];
@@ -63,6 +64,11 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 }),
                 _this.notifier.forEvent(engine_1.IEngine.Event.Sound).listen(engine, function (key) {
                     !_this.observable.isMuteSound && soundPlayer.play(key);
+                }),
+                _this.notifier.forEvent(engine_1.IEngine.Event.Next).listen(engine, function (id) {
+                    setTimeout(function () {
+                        _this.router.trigger(_this.url.play + "/" + id);
+                    }, 500);
                 }),
                 _this.notifier.forEvent(engine_1.IEngine.Event.Cycle).listen(engine, function (obj) {
                     _this.loadImage().then(function (images) {
@@ -109,13 +115,13 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             this.observable.score = this.game.getScore();
             this.observable.backNumber = this.game.getBackNumber();
             this.tutotrial(id);
-            this.game.controller.setSelectedColor(this.observable.selector);
             this.avaibleColor = level.data
                 .filter(function (d) { return d === 3 || d === 5 || d === 7 || d === 9; })
                 .filter(function (d, pos, arr) { return arr.indexOf(d) === pos; })
                 .map(function (d) { return (d - 3) / 2; })
                 .sort();
             this.observable.selector = this.avaibleColor[this.observable.indexColor];
+            this.game.controller.setSelectedColor(this.observable.selector);
         };
         Play.prototype.changeSelector = function () {
             this.observable.indexColor = (this.observable.indexColor + 1) % this.avaibleColor.length;
@@ -124,7 +130,7 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
             return true;
         };
         Play.prototype.colorUrl = function (color) {
-            return this.router.getUrl("/dist/content/imgs/" + color + ".png");
+            return this.url.images + "/" + color + ".png";
         };
         Play.prototype.muteMusic = function () {
             this.isMuteMusic = !this.isMuteMusic;
@@ -217,6 +223,10 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                         artiste_1.attr(function () { return { src: playView.colorUrl(playView.color[playView.observable.selector]) }; }),
                         artiste_1.click(function () { return function () { return playView.changeSelector(); }; })
                     ]; },
+                    "[data-id=back]": function (playView) { return artiste_1.attr(function () { return { src: playView.url.iconeback }; }); },
+                    "[data-id=music]": function (playView) { return artiste_1.attr(function () { return { src: playView.url.iconemusique }; }); },
+                    "[data-id=sound]": function (playView) { return artiste_1.attr(function () { return { src: playView.url.iconesound }; }); },
+                    ".iconeno": function (playView) { return artiste_1.attr(function () { return { src: playView.url.iconeno }; }); },
                     "#music": function (playView) { return artiste_1.click(function () { return function () { return playView.muteMusic(); }; }); },
                     "#sound": function (playView) { return artiste_1.click(function () { return function () { return playView.muteSound(); }; }); },
                     "#sound [data-id=no]": function (playView) { return hide_1.hide(function () { return !playView.observable.isMuteSound; }); },
@@ -243,7 +253,8 @@ define(["require", "exports", "artiste", "../service/app", "../service/engine", 
                 artiste_1.INotifier,
                 soundPlayer_1.ISoundPlayer,
                 imageLoader_1.IImageLoader,
-                router_1.IRouter])
+                url_1.IUrl,
+                artiste_1.IRouter])
         ], Play);
         return Play;
     }(IPlay));

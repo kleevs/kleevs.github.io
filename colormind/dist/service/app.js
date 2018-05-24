@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../data/leveldata", "database"], function (require, exports, artiste_1, leveldata_1, database_1) {
+define(["require", "exports", "artiste", "data/leveldata", "database"], function (require, exports, artiste_1, leveldata_1, database_1) {
     "use strict";
     exports.__esModule = true;
     var IApp = /** @class */ (function () {

@@ -17,35 +17,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "tools/directive/href", "service/url"], function (require, exports, artiste_1, href_1, url_1) {
+define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
     "use strict";
     exports.__esModule = true;
-    var IHome = /** @class */ (function () {
-        function IHome() {
+    var IUrl = /** @class */ (function () {
+        function IUrl() {
         }
-        return IHome;
+        return IUrl;
     }());
-    exports.IHome = IHome;
-    var Home = /** @class */ (function (_super) {
-        __extends(Home, _super);
-        function Home(observablizer, url) {
+    exports.IUrl = IUrl;
+    var Url = /** @class */ (function (_super) {
+        __extends(Url, _super);
+        function Url() {
             var _this = _super.call(this) || this;
-            _this.observable = observablizer.convert({
-                niveau1: url.niveau + "/1", niveau2: url.niveau + "/2", niveau3: url.niveau + "/3"
-            });
+            _this.home = _this.getUrl("#");
+            _this.niveau = _this.getUrl("#/niveau");
+            _this.play = _this.getUrl("#/play");
+            _this.images = _this.getUrl("dist/content/imgs");
+            _this.sounds = _this.getUrl("dist/content/sound");
+            _this.iconemusique = _this.getUrl("dist/content/imgs/iconemusique.png");
+            _this.iconesound = _this.getUrl("dist/content/imgs/iconesound.png");
+            _this.iconeno = _this.getUrl("dist/content/imgs/no.png");
+            _this.iconeback = _this.getUrl("dist/content/imgs/back.png");
             return _this;
         }
-        Home = __decorate([
-            artiste_1.View({
-                template: "dist/template/home.html",
-                binding: {
-                    "[data-id=niveau1]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau1; }); },
-                    "[data-id=niveau2]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau2; }); },
-                    "[data-id=niveau3]": function (homeView) { return href_1.href(function () { return homeView.observable.niveau3; }); }
-                }
+        Url.prototype.getUrl = function (uri) {
+            var vbaseUrl = baseUrl.replace(/\/+$/, '');
+            var vurl = uri.replace(/^\/+/, '').replace(/\/+$/, '');
+            return vbaseUrl + "/" + vurl;
+        };
+        Url = __decorate([
+            artiste_1.Service({
+                key: IUrl
             }),
-            __metadata("design:paramtypes", [artiste_1.IObservablizer, url_1.IUrl])
-        ], Home);
-        return Home;
-    }(IHome));
+            __metadata("design:paramtypes", [])
+        ], Url);
+        return Url;
+    }(IUrl));
 });

@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "../service/app", "tools/directive/href"], function (require, exports, artiste_1, app_1, href_1) {
+define(["require", "exports", "artiste", "service/app", "service/url", "tools/directive/href"], function (require, exports, artiste_1, app_1, url_1, href_1) {
     "use strict";
     exports.__esModule = true;
     var INiveau = /** @class */ (function () {
@@ -28,9 +28,10 @@ define(["require", "exports", "artiste", "../service/app", "tools/directive/href
     exports.INiveau = INiveau;
     var Niveau = /** @class */ (function (_super) {
         __extends(Niveau, _super);
-        function Niveau(app, observablizer) {
+        function Niveau(app, url, observablizer) {
             var _this = _super.call(this) || this;
             _this.app = app;
+            _this.url = url;
             _this.observable = observablizer.convert({ data: [] });
             return _this;
         }
@@ -48,7 +49,7 @@ define(["require", "exports", "artiste", "../service/app", "tools/directive/href
                                         return {
                                             done: d.score > 0 ? 'true' : 'false'
                                         };
-                                    }), href_1.href(function () { return "/#/play/" + d.id; })],
+                                    }), href_1.href(function () { return niveauView.url.play + "/" + d.id; })],
                                 "[data-id=label]": artiste_1.text(function () { return "" + d.number; }),
                                 "[data-id=score]": artiste_1.text(function () { return "" + d.score; }),
                                 "[data-id=score-color]": artiste_1.classes(function () { return { won: d.score > 0, wait: d.score <= 0 }; })
@@ -57,7 +58,7 @@ define(["require", "exports", "artiste", "../service/app", "tools/directive/href
                     }); }
                 }
             }),
-            __metadata("design:paramtypes", [app_1.IApp, artiste_1.IObservablizer])
+            __metadata("design:paramtypes", [app_1.IApp, url_1.IUrl, artiste_1.IObservablizer])
         ], Niveau);
         return Niveau;
     }(INiveau));

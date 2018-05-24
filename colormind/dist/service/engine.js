@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycleScheduler"], function (require, exports, artiste_1, app_1, soundPlayer_1, router_1, cycleScheduler_1) {
+define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cycleScheduler"], function (require, exports, artiste_1, app_1, soundPlayer_1, cycleScheduler_1) {
     "use strict";
     exports.__esModule = true;
     var IEngine = /** @class */ (function () {
@@ -26,19 +26,18 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycl
         IEngine.Event = {
             Modal: new artiste_1.Event("IEngine.Modal"),
             Sound: new artiste_1.Event("IEngine.Sound"),
-            Cycle: new artiste_1.Event("IEngine.Cycle")
+            Cycle: new artiste_1.Event("IEngine.Cycle"),
+            Next: new artiste_1.Event("IEngine.Next")
         };
         return IEngine;
     }());
     exports.IEngine = IEngine;
     var Engine = /** @class */ (function (_super) {
         __extends(Engine, _super);
-        function Engine(router, app, notifier, customRouter, cycleScheduler) {
+        function Engine(app, notifier, cycleScheduler) {
             var _this = _super.call(this) || this;
-            _this.router = router;
             _this.app = app;
             _this.notifier = notifier;
-            _this.customRouter = customRouter;
             _this.cycleScheduler = cycleScheduler;
             _this.notifier.forEvent(cycleScheduler_1.ICycleScheduler.Event().Cycle).listen(cycleScheduler, function (obj) {
                 _this.notifier.forEvent(IEngine.Event.Cycle).notify(_this, obj);
@@ -145,9 +144,7 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycl
             }); };
             var next = function () {
                 _this.app.saveNiveau(id, score);
-                setTimeout(function () {
-                    _this.router.trigger(_this.customRouter.getUrl("/#/play/" + ++id));
-                }, 500);
+                _this.notifier.forEvent(IEngine.Event.Next).notify(_this, ++id);
             };
             var back = function () {
                 if (savedStates.length > 0) {
@@ -219,10 +216,8 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "router", "./cycl
             artiste_1.Service({
                 key: IEngine
             }),
-            __metadata("design:paramtypes", [artiste_1.IRouter,
-                app_1.IApp,
+            __metadata("design:paramtypes", [app_1.IApp,
                 artiste_1.INotifier,
-                router_1.IRouter,
                 cycleScheduler_1.ICycleScheduler])
         ], Engine);
         return Engine;

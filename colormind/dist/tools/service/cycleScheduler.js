@@ -17,33 +17,49 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "tools/service/imageLoader", "url"], function (require, exports, artiste_1, imageLoader_1, url_1) {
+define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
     "use strict";
     exports.__esModule = true;
-    var IImageLoader = /** @class */ (function () {
-        function IImageLoader() {
+    var ICycleScheduler = /** @class */ (function () {
+        function ICycleScheduler() {
         }
-        return IImageLoader;
+        ICycleScheduler.Event = function () {
+            return {
+                Cycle: new artiste_1.Event("ICycleScheduler.Cycle")
+            };
+        };
+        return ICycleScheduler;
     }());
-    exports.IImageLoader = IImageLoader;
-    var ImageLoader = /** @class */ (function (_super) {
-        __extends(ImageLoader, _super);
-        function ImageLoader(imageLoaderService, url) {
+    exports.ICycleScheduler = ICycleScheduler;
+    var CycleScheduler = /** @class */ (function (_super) {
+        __extends(CycleScheduler, _super);
+        function CycleScheduler(notifier) {
             var _this = _super.call(this) || this;
-            _this.imageLoaderService = imageLoaderService;
-            _this.url = url;
+            _this.notifier = notifier;
+            _this.event = ICycleScheduler.Event().Cycle;
+            _this.cycles = [];
             return _this;
         }
-        ImageLoader.prototype.load = function (names) {
+        CycleScheduler.prototype.push = function (cycles) {
             var _this = this;
-            return this.imageLoaderService.load(names.map(function (src) { return _this.url.images + "/" + src + ".png"; }));
+            this.cycles = this.cycles.concat(cycles || []);
+            this.routine = this.routine || setInterval(function () {
+                if (_this.cycles.length > 0) {
+                    var cycle = _this.cycles.shift();
+                    cycle && _this.notifier.forEvent(_this.event).notify(_this, cycle());
+                }
+                else {
+                    clearInterval(_this.routine);
+                    _this.routine = undefined;
+                }
+            }, 50);
         };
-        ImageLoader = __decorate([
+        CycleScheduler = __decorate([
             artiste_1.Service({
-                key: IImageLoader
+                key: ICycleScheduler
             }),
-            __metadata("design:paramtypes", [imageLoader_1.IImageLoader, url_1.IUrl])
-        ], ImageLoader);
-        return ImageLoader;
-    }(IImageLoader));
+            __metadata("design:paramtypes", [artiste_1.INotifier])
+        ], CycleScheduler);
+        return CycleScheduler;
+    }(ICycleScheduler));
 });
