@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste"], function (require, exports, artiste_1) {
+define(["require", "exports", "artiste", "tools/polyfills/promise"], function (require, exports, artiste_1, promise_1) {
     "use strict";
     exports.__esModule = true;
     var IImageLoader = /** @class */ (function () {
@@ -33,10 +33,10 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
         }
         ImageLoader.prototype.load = function (names) {
             var _this = this;
-            return Promise.all(names.map(function (src) { return _this.loadImage(src); }));
+            return promise_1.Promise.all(names.map(function (src) { return _this.loadImage(src); }));
         };
         ImageLoader.prototype.loadImage = function (src) {
-            return new Promise(function (resolve) {
+            return new promise_1.Promise(function (resolve) {
                 var img = new Image();
                 img.src = src;
                 img.onload = function () {
