@@ -23,13 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tools/service", "ajax/login"], factory);
+        define(["require", "exports", "tools/service", "database/compte"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var service_1 = require("tools/service");
-    var login_1 = require("ajax/login");
+    var compte_1 = require("database/compte");
     var ILoginService = /** @class */ (function () {
         function ILoginService() {
         }
@@ -38,16 +38,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.ILoginService = ILoginService;
     var LoginService = /** @class */ (function (_super) {
         __extends(LoginService, _super);
-        function LoginService(_ajax) {
+        function LoginService(compteDatabase) {
             var _this = _super.call(this) || this;
-            _this._ajax = _ajax;
+            _this.compteDatabase = compteDatabase;
             return _this;
         }
         LoginService.prototype.connexion = function (login, password) {
-            return this._ajax.connexion(login, password).then(function (data) {
-                data && localStorage.setItem("user", JSON.stringify(data));
-                return data;
-            });
+            var user = this.compteDatabase.find({ login: login, password: password })[0];
+            localStorage.setItem("user", JSON.stringify({ id: user.id }));
+            return Promise.resolve(user && { id: user.id });
         };
         LoginService.prototype.isConnected = function () {
             return new Promise(function (resolve, reject) {
@@ -62,7 +61,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             service_1.Service({
                 key: ILoginService
             }),
-            __metadata("design:paramtypes", [login_1.ILoginAjax])
+            __metadata("design:paramtypes", [compte_1.ICompteDatabase])
         ], LoginService);
         return LoginService;
     }(ILoginService));

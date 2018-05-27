@@ -23,13 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "tools/hide", "service/login"], factory);
+        define(["require", "exports", "artiste", "tools/directive/hide", "service/login"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var hide_1 = require("tools/hide");
+    var hide_1 = require("tools/directive/hide");
     var login_1 = require("service/login");
     var IMessage = /** @class */ (function () {
         function IMessage() {

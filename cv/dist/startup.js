@@ -13,13 +13,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "layout/default/index"], factory);
+        define(["require", "exports", "artiste", "layout/index", "tools/polyfills/promise"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var index_1 = require("layout/default/index");
+    var index_1 = require("layout/index");
+    var promise_1 = require("tools/polyfills/promise");
+    window.Promise = window.Promise || promise_1.Promise;
     var Startup = /** @class */ (function () {
         function Startup(observalizer, moduleProvider, router, layout) {
             this.observable = observalizer.convert({ view: undefined, layout: layout });
@@ -46,7 +48,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             __metadata("design:paramtypes", [artiste_1.IObservablizer,
                 artiste_1.IModuleProvider,
                 artiste_1.IRouter,
-                index_1.IDefault])
+                index_1.IIndex])
         ], Startup);
         return Startup;
     }());

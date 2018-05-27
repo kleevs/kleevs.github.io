@@ -23,14 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "tools/drag", "tools/drop"], factory);
+        define(["require", "exports", "artiste", "tools/directive/drag", "tools/directive/drop"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var drag_1 = require("tools/drag");
-    var drop_1 = require("tools/drop");
+    var drag_1 = require("tools/directive/drag");
+    var drop_1 = require("tools/directive/drop");
     var IItem = /** @class */ (function () {
         function IItem() {
         }

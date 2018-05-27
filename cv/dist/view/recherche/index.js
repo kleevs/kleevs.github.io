@@ -23,16 +23,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/recherche", "service/resourceText", "tools/datatable", "model/filter/person"], factory);
+        define(["require", "exports", "artiste", "service/person", "service/resourceText", "tools/directive/datatable", "model/filter/person"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var recherche_1 = require("service/recherche");
+    var person_1 = require("service/person");
     var resourceText_1 = require("service/resourceText");
-    var datatable_1 = require("tools/datatable");
-    var person_1 = require("model/filter/person");
+    var datatable_1 = require("tools/directive/datatable");
+    var person_2 = require("model/filter/person");
     var IIndex = /** @class */ (function () {
         function IIndex() {
         }
@@ -41,9 +41,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.IIndex = IIndex;
     var IndexView = /** @class */ (function (_super) {
         __extends(IndexView, _super);
-        function IndexView(observalizer, _rechercheService, resourceTextService) {
+        function IndexView(observalizer, _personService, resourceTextService) {
             var _this = _super.call(this) || this;
-            _this._rechercheService = _rechercheService;
+            _this._personService = _personService;
             _this.observable = observalizer.convert({
                 text: {
                     first: resourceTextService.Recherche.first,
@@ -62,11 +62,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         }
         IndexView.prototype.search = function () {
             var _this = this;
-            var filter = new person_1.PersonFilter();
+            var filter = new person_2.PersonFilter();
             filter.first = this.observable.filter.first;
             filter.last = this.observable.filter.last;
             filter.age = this.observable.filter.age;
-            this._rechercheService.search(filter).then(function (res) { return _this.observable.resultats = res; });
+            this._personService.search(filter).then(function (res) { return _this.observable.resultats = res; });
         };
         IndexView = __decorate([
             artiste_1.View({
@@ -95,7 +95,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 }
             }),
             __metadata("design:paramtypes", [artiste_1.IObservablizer,
-                recherche_1.IRechercheService,
+                person_1.IPersonService,
                 resourceText_1.IResourceText])
         ], IndexView);
         return IndexView;

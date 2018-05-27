@@ -23,7 +23,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/login", "service/person", "service/email", "tools/keyup", "./conversation", "./nouveau"], factory);
+        define(["require", "exports", "artiste", "service/login", "service/person", "service/email", "tools/directive/keyup", "./conversation", "./nouveau"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -32,7 +32,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     var login_1 = require("service/login");
     var person_1 = require("service/person");
     var email_1 = require("service/email");
-    var keyup_1 = require("tools/keyup");
+    var keyup_1 = require("tools/directive/keyup");
     var conversation_1 = require("./conversation");
     var nouveau_1 = require("./nouveau");
     var IIndex = /** @class */ (function () {

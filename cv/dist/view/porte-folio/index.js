@@ -48,7 +48,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 layoutLabel: resourceTextService.PorteFolio.layouts,
                 screenLabel: resourceTextService.PorteFolio.screens
             });
-            porteFolio.getLayouts().then(function (result) { return _this.observable.layouts = result; });
             porteFolio.getScreens().then(function (result) { return _this.observable.screens = result; });
             return _this;
         }

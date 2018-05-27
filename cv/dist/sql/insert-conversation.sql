@@ -1,1 +1,0 @@
-INSERT INTO conversation (objet, createdBy) VALUES (:objet, :createdBy)

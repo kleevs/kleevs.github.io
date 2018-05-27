@@ -23,13 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "tools/submit", "service/email", "service/login", "model/person", "model/message"], factory);
+        define(["require", "exports", "artiste", "tools/directive/submit", "service/email", "service/login", "model/person", "model/message"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var submit_1 = require("tools/submit");
+    var submit_1 = require("tools/directive/submit");
     var email_1 = require("service/email");
     var login_1 = require("service/login");
     var person_1 = require("model/person");

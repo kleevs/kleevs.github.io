@@ -23,15 +23,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "tools/exception/business", "tools/handler/notify", "tools/handler/focus", "service/login", "service/person", "service/email", "model/conversation", "./new-message", "./contact"], factory);
+        define(["require", "exports", "artiste", "tools/exception/business", "tools/directive/notify", "tools/directive/focus", "service/login", "service/person", "service/email", "model/conversation", "./new-message", "./contact"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var business_1 = require("tools/exception/business");
-    var notify_1 = require("tools/handler/notify");
-    var focus_1 = require("tools/handler/focus");
+    var notify_1 = require("tools/directive/notify");
+    var focus_1 = require("tools/directive/focus");
     var login_1 = require("service/login");
     var person_1 = require("service/person");
     var email_1 = require("service/email");

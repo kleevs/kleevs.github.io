@@ -41,12 +41,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         function CompetenceService(_refService) {
             var _this = _super.call(this) || this;
             _this._refService = _refService;
-            _this._competences = {};
-            _this._refService.getCompetences().then(function (value) { return _this._competences = value; });
             return _this;
         }
         CompetenceService.prototype.getCompetences = function () {
-            return this._competences;
+            return this._refService.getCompetences();
         };
         CompetenceService = __decorate([
             service_1.Service({

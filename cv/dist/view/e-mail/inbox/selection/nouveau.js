@@ -23,14 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/email", "tools/href"], factory);
+        define(["require", "exports", "artiste", "service/email", "tools/directive/href"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var email_1 = require("service/email");
-    var href_1 = require("tools/href");
+    var href_1 = require("tools/directive/href");
     var INouveau = /** @class */ (function () {
         function INouveau() {
         }

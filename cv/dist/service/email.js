@@ -23,14 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tools/exception/business", "tools/service", "ajax/email"], factory);
+        define(["require", "exports", "tools/exception/business", "tools/service"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var business_1 = require("tools/exception/business");
     var service_1 = require("tools/service");
-    var email_1 = require("ajax/email");
     var IEmailService = /** @class */ (function () {
         function IEmailService() {
         }
@@ -39,22 +38,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.IEmailService = IEmailService;
     var EmailService = /** @class */ (function (_super) {
         __extends(EmailService, _super);
-        function EmailService(_ajax) {
-            var _this = _super.call(this) || this;
-            _this._ajax = _ajax;
-            return _this;
+        function EmailService() {
+            return _super.call(this) || this;
         }
         EmailService.prototype.conversation = function (id) {
-            return this._ajax.conversation(id);
+            return Promise.resolve([]);
         };
         EmailService.prototype.conversationById = function (id) {
-            return this._ajax.conversationById(id);
+            return Promise.resolve(undefined);
         };
         EmailService.prototype.message = function (id, lastId) {
-            return this._ajax.message(id, lastId);
+            return Promise.resolve([]);
         };
         EmailService.prototype.send = function (message) {
-            return this._ajax.send(message);
+            return Promise.resolve(false);
         };
         EmailService.prototype.nouveau = function (message) {
             if (!message.conversation.objet) {
@@ -67,26 +64,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                     throw new business_1.BusinessException("Ajouter au minimum un destinataire.", "DESTREQ");
                 });
             }
-            return this._ajax.nouveau(message);
+            return Promise.resolve(undefined);
         };
         EmailService.prototype.statistiqueMessageSent = function () {
-            return this._ajax.allMessages().then(function (messages) { return messages
-                .map(function (m) { return m.writtenBy.id; })
-                .filter(function (v, i, a) { return a.indexOf(v) === i; })
-                .map(function (id) { return { id: id, messages: messages.filter(function (m) { return m.writtenBy.id === id; }) }; })
-                .map(function (d) { return [
-                d.messages[0].writtenBy.first + " " + d.messages[0].writtenBy.last,
-                d.messages.length
-            ]; }); }).then(function (res) {
-                res.unshift(["Nom", "Messages envoyés"]);
-                return res;
-            });
+            return Promise.resolve([]);
         };
         EmailService = __decorate([
             service_1.Service({
                 key: IEmailService
             }),
-            __metadata("design:paramtypes", [email_1.IEmailAjax])
+            __metadata("design:paramtypes", [])
         ], EmailService);
         return EmailService;
     }(IEmailService));

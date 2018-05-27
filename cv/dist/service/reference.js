@@ -23,13 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tools/service", "ajax/reference"], factory);
+        define(["require", "exports", "tools/service"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var service_1 = require("tools/service");
-    var reference_1 = require("ajax/reference");
+    // import { IReferenceAjax } from 'ajax/reference';
     var IReferenceService = /** @class */ (function () {
         function IReferenceService() {
         }
@@ -38,22 +38,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.IReferenceService = IReferenceService;
     var ReferenceService = /** @class */ (function (_super) {
         __extends(ReferenceService, _super);
-        function ReferenceService(_ajax) {
-            var _this = _super.call(this) || this;
-            _this._ajax = _ajax;
-            return _this;
+        function ReferenceService() {
+            return _super.call(this) || this;
         }
         ReferenceService.prototype.getPorteFolio = function () {
-            return this._ajax.getPorteFolio();
+            return Promise.resolve([
+                { link: "#/formulaire", text: "Formulaire" },
+                { link: "#/recherche", text: "Recherche" },
+                { link: "#/drag-and-drop", text: "Drag & Drop" },
+                // { link: "#/e-mail", text: "E-mail" },
+                { link: "#/chart", text: "Google Charts" },
+                { link: "https://kleevs.github.io/colormind/", text: "Colormind" }
+            ]);
         };
         ReferenceService.prototype.getCompetences = function () {
-            return this._ajax.getCompetences();
+            return Promise.resolve({
+                "Système d’exploitation": ["Windows", "UNIX-Linux (Ubuntu)", "Mac"],
+                "Back end": {
+                    "C#": [".Net Core", ".Net MVC", ".Net Webform", "Entity framework"],
+                    "Nodejs": [],
+                    "Php": ["Zend 2", "Symphony 2"],
+                    "Sql": ["Sql server", "Mysql"]
+                },
+                "Front end": {
+                    "Html/Css": [],
+                    "Sass": [],
+                    "Typescript/javascript": ["Angular", "<a href='https://github.com/kleevs/artist'>Artist</a>", "Knockout", "Backbonejs", "Requirejs"]
+                },
+                "Outils": ["Visual Studio 2017", "Visual Studio Code", "SVN", "Git", "Nugget", "Npm", "Sql Server Management"]
+            });
         };
         ReferenceService = __decorate([
             service_1.Service({
                 key: IReferenceService
             }),
-            __metadata("design:paramtypes", [reference_1.IReferenceAjax])
+            __metadata("design:paramtypes", [])
         ], ReferenceService);
         return ReferenceService;
     }(IReferenceService));

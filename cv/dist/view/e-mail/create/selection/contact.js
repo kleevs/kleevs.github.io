@@ -23,13 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "tools/move"], factory);
+        define(["require", "exports", "artiste", "tools/directive/move"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
-    var move_1 = require("tools/move");
+    var move_1 = require("tools/directive/move");
     var IContact = /** @class */ (function () {
         function IContact() {
         }

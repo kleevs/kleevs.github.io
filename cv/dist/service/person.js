@@ -23,14 +23,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tools/service", "ajax/recherche", "ajax/person"], factory);
+        define(["require", "exports", "tools/service", "database/user"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var service_1 = require("tools/service");
-    var recherche_1 = require("ajax/recherche");
-    var person_1 = require("ajax/person");
+    var user_1 = require("database/user");
     var IPersonService = /** @class */ (function () {
         function IPersonService() {
         }
@@ -39,29 +38,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.IPersonService = IPersonService;
     var PersonService = /** @class */ (function (_super) {
         __extends(PersonService, _super);
-        function PersonService(_ajax, _personAjax) {
+        function PersonService(_database) {
             var _this = _super.call(this) || this;
-            _this._ajax = _ajax;
-            _this._personAjax = _personAjax;
+            _this._database = _database;
             return _this;
         }
         PersonService.prototype.search = function (filter) {
-            return this._ajax.search(filter);
+            return Promise.resolve(this._database.find({
+                first: filter.first,
+                last: filter.last,
+                age: filter.age
+            }));
         };
         PersonService.prototype.save = function (persons) {
-            return this._ajax.save(persons);
+            var _this = this;
+            return Promise.resolve(persons.forEach(function (p) { return _this._database.insert(p); }));
         };
         PersonService.prototype.friend = function (id) {
-            return this._personAjax.friend(id);
+            return Promise.resolve([]);
         };
         PersonService.prototype.getById = function (id) {
-            return this._personAjax.getById(id);
+            return Promise.resolve(this._database.find({
+                id: id
+            })[0]);
         };
         PersonService = __decorate([
             service_1.Service({
                 key: IPersonService
             }),
-            __metadata("design:paramtypes", [recherche_1.IRechercheAjax, person_1.IPersonAjax])
+            __metadata("design:paramtypes", [user_1.IUserDatabase])
         ], PersonService);
         return PersonService;
     }(IPersonService));

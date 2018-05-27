@@ -59,6 +59,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         };
         List.prototype.save = function () {
             this._notifier.forEvent(IList.Event.SaveUsers).notify(this, JSON.parse(JSON.stringify(this.observable.users)));
+            this.clear();
         };
         List.prototype.clear = function () {
             this.observable.users = [];

@@ -23,7 +23,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "tools/service", "./resourceText", "./reference", "model/enum/typePorteFolio"], factory);
+        define(["require", "exports", "tools/service", "./resourceText", "./reference"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -31,7 +31,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     var service_1 = require("tools/service");
     var resourceText_1 = require("./resourceText");
     var reference_1 = require("./reference");
-    var typePorteFolio_1 = require("model/enum/typePorteFolio");
     var IPorteFolioService = /** @class */ (function () {
         function IPorteFolioService() {
         }
@@ -47,11 +46,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             _this.search = undefined;
             return _this;
         }
-        PorteFolioService.prototype.getLayouts = function () {
-            return this._refService.getPorteFolio().then(function (result) { return result.filter(function (item) { return item.type === typePorteFolio_1.TypePorteFolio.layout; }); });
-        };
         PorteFolioService.prototype.getScreens = function () {
-            return this._refService.getPorteFolio().then(function (result) { return result.filter(function (item) { return item.type === typePorteFolio_1.TypePorteFolio.screen; }); });
+            return this._refService.getPorteFolio();
         };
         PorteFolioService.prototype.recherche = function (value) {
             if (value) {

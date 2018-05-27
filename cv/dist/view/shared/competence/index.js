@@ -23,14 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/competence", "tools/tree"], factory);
+        define(["require", "exports", "artiste", "service/competence", "tools/directive/tree"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var competence_1 = require("service/competence");
-    var tree_1 = require("tools/tree");
+    var tree_1 = require("tools/directive/tree");
     var IIndex = /** @class */ (function () {
         function IIndex() {
         }
@@ -39,19 +39,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     exports.IIndex = IIndex;
     var Index = /** @class */ (function (_super) {
         __extends(Index, _super);
-        function Index(_competenceService) {
+        function Index(observablizer, competenceService) {
             var _this = _super.call(this) || this;
-            _this._competenceService = _competenceService;
+            _this.observable = observablizer.convert({ tree: undefined });
+            competenceService.getCompetences().then(function (value) { return _this.observable.tree = value; });
             return _this;
         }
         Index = __decorate([
             artiste_1.View({
                 template: "tmpl/shared/competence.html",
                 binding: {
-                    "[data-id=list]": function (view) { return tree_1.tree(function () { return view._competenceService.getCompetences(); }); }
+                    "[data-id=list]": function (view) { return tree_1.tree(function () { return view.observable.tree; }); }
                 }
             }),
-            __metadata("design:paramtypes", [competence_1.ICompetenceService])
+            __metadata("design:paramtypes", [artiste_1.IObservablizer, competence_1.ICompetenceService])
         ], Index);
         return Index;
     }(IIndex));

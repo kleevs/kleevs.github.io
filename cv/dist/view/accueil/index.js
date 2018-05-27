@@ -23,13 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/resourceText"], factory);
+        define(["require", "exports", "artiste", "service/resourceText", "tools/directive/text"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var resourceText_1 = require("service/resourceText");
+    var text_1 = require("tools/directive/text");
     var IIndex = /** @class */ (function () {
         function IIndex() {
         }
@@ -40,6 +41,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         __extends(IndexView, _super);
         function IndexView(resourceTextService) {
             var _this = _super.call(this) || this;
+            _this.resourceTextService = resourceTextService;
             _this.hello = resourceTextService.Accueil.hello;
             _this.presentation = resourceTextService.Accueil.paragraphe;
             return _this;
@@ -49,7 +51,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 template: "tmpl/accueil.html",
                 binding: {
                     "[data-id=hello]": function (view) { return artiste_1.text(function () { return view.hello; }); },
-                    "[data-id=presentation]": function (view) { return artiste_1.text(function () { return view.presentation; }); }
+                    "[data-id=presentation]": function (view) { return artiste_1.text(function () { return view.presentation; }); },
+                    "[data-text]": function (view) { return text_1.text(function () { return view.resourceTextService.Accueil; }); }
                 }
             }),
             __metadata("design:paramtypes", [resourceText_1.IResourceText])

@@ -23,14 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/login", "tools/submit"], factory);
+        define(["require", "exports", "artiste", "service/login", "tools/directive/submit"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var login_1 = require("service/login");
-    var submit_1 = require("tools/submit");
+    var submit_1 = require("tools/directive/submit");
     var ILogin = /** @class */ (function () {
         function ILogin() {
         }

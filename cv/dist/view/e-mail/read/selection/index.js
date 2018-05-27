@@ -23,14 +23,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/login", "tools/keyup", "./contact"], factory);
+        define(["require", "exports", "artiste", "service/login", "tools/directive/keyup", "./contact"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
     var login_1 = require("service/login");
-    var keyup_1 = require("tools/keyup");
+    var keyup_1 = require("tools/directive/keyup");
     var contact_1 = require("./contact");
     var IIndex = /** @class */ (function () {
         function IIndex() {
