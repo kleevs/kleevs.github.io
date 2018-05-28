@@ -76,3 +76,10 @@ li {
 .draggable {
 	user-select: none;
 }
+
+.imgarchi {
+	max-width: 100%;
+    width: 800px;
+    display: block;
+    margin: auto;
+}

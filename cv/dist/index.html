@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a5276">
+    <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/content/css/bootstrap.override.css">
+    <link rel="stylesheet" type="text/css" href="/content/css/animation.css">
+	<link rel="stylesheet" type="text/css" href="/content/css/e-mail.css">
+    <link rel="stylesheet" type="text/css" href="/content/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/content/css/style.css">
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <script src="/node_modules/notifyjs-browser/dist/notify.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+</head>
+
+<body>
+    <div layout class="full-screen"></div>
+    <script src="/node_modules/amd-loader/dist/amd-loader.js"></script>
+    <script>
+        require.config({
+            paths: { 
+                node_modules: "/node_modules",
+				model: "model",
+				tools: "tools",
+				service: "service"
+            }
+        });
+        require('/startup/startup');
+    </script>
+</body>
+</html>
