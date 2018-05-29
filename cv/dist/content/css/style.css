@@ -83,3 +83,11 @@ li {
     display: block;
     margin: auto;
 }
+
+.animated {
+	transition: opacity 0.5s linear;
+}
+
+.invisible {
+	opacity: 0;
+}

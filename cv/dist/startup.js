@@ -13,12 +13,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "layout/index", "tools/polyfills/promise"], factory);
+        define(["require", "exports", "artiste", "tools/directive/view", "layout/index", "tools/polyfills/promise"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var artiste_1 = require("artiste");
+    var view_1 = require("tools/directive/view");
     var index_1 = require("layout/index");
     var promise_1 = require("tools/polyfills/promise");
     window.Promise = window.Promise || promise_1.Promise;
@@ -42,7 +43,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             artiste_1.View({
                 html: "<div class='full-screen'></div>",
                 binding: {
-                    "this": function (starter) { return [artiste_1.view(function () { return starter.observable.layout; })]; }
+                    "this": function (starter) { return [view_1.view(function () { return starter.observable.layout; })]; }
                 }
             }),
             __metadata("design:paramtypes", [artiste_1.IObservablizer,

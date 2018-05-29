@@ -23,7 +23,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "artiste", "service/resourceText", "service/porteFolio", "tools/directive/href", "view/shared/competence/index"], factory);
+        define(["require", "exports", "artiste", "service/resourceText", "service/porteFolio", "tools/directive/href", "tools/directive/view", "view/shared/competence/index"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -32,6 +32,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     var resourceText_1 = require("service/resourceText");
     var porteFolio_1 = require("service/porteFolio");
     var href_1 = require("tools/directive/href");
+    var view_1 = require("tools/directive/view");
     var index_1 = require("view/shared/competence/index");
     var IIndex = /** @class */ (function () {
         function IIndex() {
@@ -58,8 +59,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 template: "tmpl/layout/default.html",
                 binding: {
                     "[data-id=title]": function (layout) { return artiste_1.text(function () { return layout._resourceText.Layout.competence; }); },
-                    "[data-id=frame]": function (layout) { return artiste_1.view(function () { return layout.observable.screen; }); },
-                    "[data-id=competence]": function (layout) { return artiste_1.view(function () { return layout.observable.competences; }); },
+                    "[data-id=frame]": function (layout) { return view_1.view(function () { return layout.observable.screen; }); },
+                    "[data-id=competence]": function (layout) { return view_1.view(function () { return layout.observable.competences; }); },
                     "[data-id=home]": function (layout) { return [
                         artiste_1.text(function () { return layout._resourceText.Layout.accueil; }),
                         href_1.href(function () { return "#/accueil"; })
