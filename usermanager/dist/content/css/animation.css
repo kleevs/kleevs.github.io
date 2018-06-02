@@ -1,0 +1,4 @@
+.transition-position {
+	-webkit-transition: left 0.6s, top 0.6s;
+    transition: left 0.6s, top 0.6s;
+}
