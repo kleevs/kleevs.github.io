@@ -91,7 +91,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 this.userService.create(this.user) ||
                 this.userService.update(this.user))
                 .then(function () {
-                _this.router.trigger("/#/");
+                _this.router.trigger("./#/");
             }).catch(function (exception) {
                 if (exception instanceof userError_1.UserError) {
                     exception.forEach(function (error) {
