@@ -1,1 +1,0 @@
-INSERT INTO participant (conversation, person) VALUES (:conversation, :person)

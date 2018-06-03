@@ -18,15 +18,54 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     var service_1 = require("tools/service");
     var IResourceText = /** @class */ (function () {
         function IResourceText() {
-            this.Layout = {
-                accueil: "Accueil",
-                competence: "Compétences",
-                porteFolio: "Porte Folio"
+            this.resume = {
+                paragraphe: {
+                    $1: "Je suis D\u00E9veloppeur web depuis maintenant 5 ans. \n                Mes domaines de comp\u00E9tences sont le C#.Net (Mvc et Core), Javascript, Android et l'IOS.\n                J'ai pu travailler sur des projets de maintenance corrective et \u00E9volutive, mais aussi sur de projets d'application web \"Ex nihilo\" pour de grands comptes (V\u00E9olia, A\u00E9roport de Paris, Sodexo, MAF, ...).\n                Le d\u00E9veloppement d'application Android et IOS est une activit\u00E9 que j'exerce seul et \u00E0 titre personnel."
+                }
             };
-            this.PorteFolio = {
-                layouts: "Layouts",
-                screens: "Ecrans"
+            this.fullstack = {
+                paragraphe: {
+                    $1: "Avant de concevoir une application web, il est important de définir ce qu'est une application web.",
+                    $2: "Une application web d\u00E9signe un logiciel d\u00E9velopp\u00E9 avec les m\u00EAmes technologies que celles utilis\u00E9es pour les sites internet. \n                Ce type d'application est h\u00E9berg\u00E9 sur un serveur et accessible via un navigateur web. Par cons\u00E9quent, l'\u00E9cosyst\u00E8me dans lequel \u00E9volue\n                une application web est compos\u00E9 a minima de deux machines qui communiquent. Ce qu'on appelle donc commun\u00E9ment une application web est un programme\n                s'\u00E9xecutant sur un serveur (C#, Java, Php, NodeJs, ...) qui fournit \u00E0 chaque requ\u00EAte http le contenu compr\u00E9hensible aux navigateurs web (html, css, javascript)\n                permettant alors \u00E0 l'utilisateur d'acceder aux fonctionnalit\u00E9s d\u00E9sir\u00E9es via une interface graphique.\n                Le programme s'\u00E9xecutant sur le serveur distant est appel\u00E9 backend et l'ensemble des fichier html, css et javascript compris par le navigateur web est appel\u00E9 frontend.",
+                    $3: "Aujourd'hui, la volont\u00E9 d'acceder aux fonctionnalit\u00E9s d'une application via diff\u00E9rents terminaux (pc, tablettes et mobiles) obligent les concepteurs \u00E0 fournir pour la m\u00EAme application\n                des interfaces adapt\u00E9es pour chaque support. Ainsi, la responsabilit\u00E9 de la cr\u00E9ation de l'interface utilisateur est incomb\u00E9e aux applications frontend tandis que l'application backend reste \n                en charge de la gestion et l'\u00E9change des donn\u00E9es ayant un sens fonctionnel. L'\u00E9volution du javascript et de ses performances a permis l'\u00E9mergence de ces applications frontend.",
+                    $4: "Voici un exemple d'architecture qui illuste ce concept."
+                }
             };
+            this.education = {
+                sherbrooke: {
+                    title: "Université de Sherbrooke (Qc)",
+                    diplome: "Maitrise en informatique",
+                    periode: "Juin 2011 - Aout 2013"
+                },
+                ensiie: {
+                    title: "ENSIIE",
+                    diplome: "Ingénieur en informatique",
+                    periode: "Septembre 2009 - Aout 2013"
+                },
+                prepa: {
+                    title: "Institut Galilée",
+                    diplome: "Classe préparatoire PCSI",
+                    periode: "Septembre 2007 - Juin 2009"
+                }
+            };
+            this.experience = {};
+            this.navigation = {};
+            this.portefolio = {
+                title: "Porte folio",
+                colormind: {
+                    description: "Colormind",
+                    link: "site web"
+                },
+                artiste: {
+                    description: "Artiste",
+                    link: "package npm"
+                },
+                usermanager: {
+                    description: "POC application de gestion des utilisateurs",
+                    link: "site web"
+                }
+            };
+            this.skill = {};
             this.Accueil = {
                 hello: "Bonjour,",
                 paragraphe: "Je suis D\u00E9veloppeur web depuis maintenant 5 ans. \n        Mes domaines de comp\u00E9tences sont le C#.Net (Mvc et Core), Javascript, Android et l'IOS.\n        J'ai pu travailler sur des projets de maintenance corrective et \u00E9volutive, mais aussi sur de projets d'application web \"Ex nihilo\" pour de grands comptes (V\u00E9olia, A\u00E9roport de Paris, Sodexo, MAF, ...).\n        Le d\u00E9veloppement d'application Android et IOS est une activit\u00E9 que j'exerce seul et \u00E0 titre personnel.",
