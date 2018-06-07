@@ -63,6 +63,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 usermanager: {
                     description: "POC application de gestion des utilisateurs",
                     link: "site web"
+                },
+                mail: {
+                    description: "POC webmail",
+                    link: "site web"
                 }
             };
             this.skill = {};
