@@ -1,0 +1,31 @@
+{
+  "name": "poc-mail",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && cp -r src/resource/* dist/",
+    "start": "node node_modules/http-server/bin/http-server -p 80"
+  },
+  "dependencies": {
+    "animate.css": "^3.6.1",
+    "artistejs": "^1.0.1",
+    "bootstrap": "^4.1.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.14",
+    "http-server": "^0.11.1",
+    "typescript": "^2.8.3"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "cv"
+  ],
+  "author": "kleevs"
+}

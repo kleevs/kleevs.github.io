@@ -1,0 +1,43 @@
+<div class="full-screen">
+    <table class="table table-striped table-hover full-screen">
+        <thead class="head-size">
+            <tr class="full-screen">
+                <th>From</th>
+                <th>Object</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody class="body-size scroll">
+            <tr class="clickable">
+                <td data-id="from"></td>
+                <td data-id="object"></td>
+                <td data-id="date"></td>
+            </tr>
+        </tbody>
+        <tfoot class="foot-size">
+            <tr class="full-screen">
+                <td>Nb messages : <span data-id="nbmessage"></span></td>
+                <td>
+                    <div class="input-group mb-3 no-margin-bottom">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="page-addon1">
+                                Page - <span data-id="current-page"></span>
+                            </span>
+                        </div>
+                        <select data-id="page" aria-describedby="page-addon1" class="form-control"></select>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group mb-3 no-margin-bottom">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="pagelength-addon1">
+                                    Nb messages par page
+                            </span>
+                        </div>
+                        <input data-id="page-length" aria-describedby="pagelength-addon1" class="form-control"/>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
