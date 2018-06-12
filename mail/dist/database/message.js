@@ -39,6 +39,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         return IMessageDatabase;
     }());
     exports.IMessageDatabase = IMessageDatabase;
+    var TypeMessage = {
+        Received: 'Received',
+        Sent: 'Sent'
+    };
     var MessageDatabase = /** @class */ (function (_super) {
         __extends(MessageDatabase, _super);
         function MessageDatabase() {
@@ -57,7 +61,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                     destinataires: message.destinataires.map(function (d) { return d.email; }).join(","),
                     sender: message.sender.email,
                     isOpen: false,
-                    date: date_1.toTime(now)
+                    date: date_1.toTime(now),
+                    type: TypeMessage.Received
                 });
             });
             this.db.insert({
@@ -67,11 +72,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 destinataires: message.destinataires.map(function (d) { return d.email; }).join(","),
                 sender: message.sender.email,
                 isOpen: false,
-                date: date_1.toTime(now)
+                date: date_1.toTime(now),
+                type: TypeMessage.Sent
             });
         };
         MessageDatabase.prototype.inbox = function (login) {
-            return this.db.find({ inbox: login })
+            return this.db.find({ inbox: login, type: TypeMessage.Received })
                 .sort(function (a, b) { return b.id - a.id; })
                 .map(function (m) {
                 var message = new message_1.Message();
@@ -95,7 +101,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 .filter(function (m) { return m.destinataires.some(function (d) { return d.email === login; }); });
         };
         MessageDatabase.prototype.sent = function (login) {
-            return this.db.find({ inbox: login })
+            return this.db.find({ inbox: login, type: TypeMessage.Sent })
                 .sort(function (a, b) { return b.id - a.id; })
                 .map(function (m) {
                 var message = new message_1.Message();
