@@ -55,22 +55,22 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
                 isMuteSound: _this.app.getMuteSound()
             });
             _this.listeners = [
-                notifier.forEvent(engine_1.IEngine.Event.Modal).listen(engine, function (item) {
+                engine_1.IEngine.Event.Modal.on(function (item) {
                     _this.notifier.forEvent(IPlay.Event.Modal).notify(_this, {
                         message: item.message,
                         callback: item.callback,
                         isMute: _this.observable.isMuteSound
                     });
                 }),
-                _this.notifier.forEvent(engine_1.IEngine.Event.Sound).listen(engine, function (key) {
+                engine_1.IEngine.Event.Sound.on(function (key) {
                     !_this.observable.isMuteSound && soundPlayer.play(key);
                 }),
-                _this.notifier.forEvent(engine_1.IEngine.Event.Next).listen(engine, function (id) {
+                engine_1.IEngine.Event.Next.on(function (id) {
                     setTimeout(function () {
-                        _this.router.trigger(_this.url.play + "/" + id);
+                        _this.router.trigger(_this.url.play + "/" + id, true);
                     }, 500);
                 }),
-                _this.notifier.forEvent(engine_1.IEngine.Event.Cycle).listen(engine, function (obj) {
+                engine_1.IEngine.Event.Cycle.on(function (obj) {
                     _this.loadImage().then(function (images) {
                         var res = [];
                         obj && obj.forEach(function (item, i) {
@@ -101,9 +101,13 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
             return _this;
         }
         Play.prototype.init = function (id, isMute) {
-            var data = this.app.getById(id);
             this.isMuteMusic = isMute;
-            this.notifier.forEvent(IPlay.Event.MuteMusic).notify(this, isMute);
+            this.observable.id = id;
+        };
+        Play.prototype.start = function () {
+            var id = this.observable.id;
+            var data = this.app.getById(id);
+            this.notifier.forEvent(IPlay.Event.MuteMusic).notify(this, this.isMuteMusic);
             this.observable.id = id;
             this.observable.number = data.number;
             this.observable.score = 0;
@@ -165,7 +169,7 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
             }
             return true;
         };
-        Play.prototype.destroy = function () {
+        Play.prototype.stop = function () {
             this.listeners.forEach(function (l) { return l.stop(); });
         };
         Play.prototype.loadImage = function () {
@@ -216,6 +220,11 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
             artiste_1.View({
                 template: "dist/template/play.html",
                 binding: {
+                    "this": function (playView) { return [
+                        joystick_1.joystick(function () { return function (e) { return playView.controller(e); }; }),
+                        mousemove_1.mousemove(function () { return function (e) { return playView.controller(e); }; }),
+                        artiste_1.dom({ "in": function () { return playView.start(); }, out: function () { return playView.stop(); } }),
+                    ]; },
                     "[data-id=title]": function (playView) { return artiste_1.text(function () { return "niveau " + playView.observable.number; }); },
                     "[data-id=score]": function (playView) { return artiste_1.text(function () { return "" + playView.observable.score; }); },
                     "[data-id=back-number]": function (playView) { return artiste_1.text(function () { return "" + playView.observable.backNumber; }); },
@@ -231,10 +240,6 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
                     "#sound": function (playView) { return artiste_1.click(function () { return function () { return playView.muteSound(); }; }); },
                     "#sound [data-id=no]": function (playView) { return hide_1.hide(function () { return !playView.observable.isMuteSound; }); },
                     "#back": function (playView) { return artiste_1.click(function () { return function () { return playView.controller({ cmd: 'BACK' }); }; }); },
-                    "this": function (playView) { return [
-                        joystick_1.joystick(function () { return function (e) { return playView.controller(e); }; }),
-                        mousemove_1.mousemove(function () { return function (e) { return playView.controller(e); }; })
-                    ]; },
                     "canvas": function (playView) { return [
                         canvas_1.canvas(function () { return playView.observable.screen; }),
                         artiste_1.attr(function () {
@@ -250,7 +255,7 @@ define(["require", "exports", "artiste", "service/app", "service/engine", "servi
             __metadata("design:paramtypes", [app_1.IApp,
                 artiste_1.IObservablizer,
                 engine_1.IEngine,
-                artiste_1.INotifier,
+                artiste_1.IEventManager,
                 soundPlayer_1.ISoundPlayer,
                 imageLoader_1.IImageLoader,
                 url_1.IUrl,

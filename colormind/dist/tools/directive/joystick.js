@@ -1,9 +1,11 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    var last;
     function joystick(valueAccessor) {
         return function (element) {
-            document.addEventListener("keyup", function (e) {
+            last && document.removeEventListener('keyup', last);
+            document.addEventListener("keyup", last = function (e) {
                 if (e.keyCode === 37) {
                     valueAccessor()({ cmd: 'LEFT' });
                 }

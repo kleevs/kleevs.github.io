@@ -2,11 +2,19 @@ define(["require", "exports", "artiste", "jquery", "bootstrap"], function (requi
     "use strict";
     exports.__esModule = true;
     function modal() {
-        var $element;
-        return [
-            function (element) { $element = $(element); return function () { }; },
-            artiste_1.dom({ "in": function () { return setTimeout(function () { return $element.modal(); }); }, out: function () { } })
-        ];
+        return function (element, serviceProvider) {
+            var $element = $(element);
+            var isShown = false;
+            return artiste_1.dom({
+                "in": function () { return setTimeout(function () {
+                    if (!isShown) {
+                        $element.modal();
+                        isShown = true;
+                    }
+                }); },
+                out: function () { }
+            })(element, serviceProvider);
+        };
     }
     exports.modal = modal;
     function dismiss(valueAccessor) {

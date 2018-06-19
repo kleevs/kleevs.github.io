@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "artiste", "tools/directive/modal"], function (require, exports, artiste_1, modal_1) {
+define(["require", "exports", "artiste", "tools/directive/rotateOut"], function (require, exports, artiste_1, rotateOut_1) {
     "use strict";
     exports.__esModule = true;
     var IModal = /** @class */ (function () {
@@ -37,14 +37,20 @@ define(["require", "exports", "artiste", "tools/directive/modal"], function (req
             this.observable.message = msg;
         };
         Modal.prototype.setCallback = function (callback) {
-            this.observable.callback = callback;
+            this.callback = callback;
+        };
+        Modal.prototype.close = function () {
+            var _this = this;
+            this.observable.callback = function () { _this.callback(); };
+            return true;
         };
         Modal = __decorate([
             artiste_1.View({
                 template: "dist/template/modal.html",
                 binding: {
+                    ".modal": function (modal) { return rotateOut_1.rotateOut(function () { return modal.observable.callback; }); },
                     "[data-id=message]": function (modal) { return artiste_1.text(function () { return modal.observable.message; }); },
-                    "this": function (modalView) { return [modal_1.dismiss(function () { return modalView.observable.callback; }), modal_1.modal()]; }
+                    "[data-action=close]": function (modal) { return artiste_1.click(function () { return function () { return modal.close(); }; }); }
                 }
             }),
             __metadata("design:paramtypes", [artiste_1.IObservablizer])

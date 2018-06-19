@@ -23,30 +23,34 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
     var ICycleScheduler = /** @class */ (function () {
         function ICycleScheduler() {
         }
-        ICycleScheduler.Event = function () {
-            return {
-                Cycle: new artiste_1.Event("ICycleScheduler.Cycle")
-            };
-        };
         return ICycleScheduler;
     }());
     exports.ICycleScheduler = ICycleScheduler;
     var CycleScheduler = /** @class */ (function (_super) {
         __extends(CycleScheduler, _super);
-        function CycleScheduler(notifier) {
+        function CycleScheduler() {
             var _this = _super.call(this) || this;
-            _this.notifier = notifier;
-            _this.event = ICycleScheduler.Event().Cycle;
             _this.cycles = [];
+            _this.callbacks = [];
             return _this;
         }
+        CycleScheduler.prototype.on = function (callback) {
+            var _this = this;
+            this.callbacks.push(callback);
+            return { stop: function () {
+                    _this.callbacks = _this.callbacks.filter(function (c) { return c !== callback; });
+                } };
+        };
         CycleScheduler.prototype.push = function (cycles) {
             var _this = this;
             this.cycles = this.cycles.concat(cycles || []);
             this.routine = this.routine || setInterval(function () {
                 if (_this.cycles.length > 0) {
                     var cycle = _this.cycles.shift();
-                    cycle && _this.notifier.forEvent(_this.event).notify(_this, cycle());
+                    if (cycle) {
+                        var c = cycle();
+                        _this.callbacks.forEach(function (callback) { return callback(c); });
+                    }
                 }
                 else {
                     clearInterval(_this.routine);
@@ -58,7 +62,7 @@ define(["require", "exports", "artiste"], function (require, exports, artiste_1)
             artiste_1.Service({
                 key: ICycleScheduler
             }),
-            __metadata("design:paramtypes", [artiste_1.INotifier])
+            __metadata("design:paramtypes", [])
         ], CycleScheduler);
         return CycleScheduler;
     }(ICycleScheduler));

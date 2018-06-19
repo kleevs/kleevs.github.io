@@ -1,9 +1,12 @@
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p data-id="message"></p>
-                <button type="button" style="width: 100%;" class="btn btn-primary" data-dismiss="modal">Ok</button>
+<div class="full-screen relative">
+    <div class="modal-backdrop show"></div>
+    <div class="modal show animated rotateIn" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p data-id="message"></p>
+                    <button type="button" style="width: 100%;" class="btn btn-primary" data-action="close">Ok</button>
+                </div>
             </div>
         </div>
     </div>

@@ -17,9 +17,7 @@ define(["require", "exports", "artiste", "view/home", "view/niveau", "view/play"
             this.observable = observalizer.convert({ view: viewProvider.newInstance(home_1.IHome), modal: undefined });
             this.isMute = undefined;
             router.on(function (href, pathname, hash) {
-                if (_this.observable.view && _this.observable.view instanceof play_1.IPlay) {
-                    _this.observable.view.destroy();
-                }
+                _this.observable.modal = undefined;
                 if (hash.indexOf("#/niveau/") === 0) {
                     var level = parseInt(hash.split("/").pop());
                     var niveauScreen = viewProvider.newInstance(niveau_1.INiveau);
@@ -29,28 +27,30 @@ define(["require", "exports", "artiste", "view/home", "view/niveau", "view/play"
                 else if (hash.indexOf("#/play/") === 0) {
                     var playId = parseInt(hash.split("/").pop());
                     var playScreen = viewProvider.newInstance(play_1.IPlay);
-                    notifier.forEvent(play_1.IPlay.Event.Modal).listen(playScreen, function (item) {
-                        var modalView = viewProvider.newInstance(modal_1.IModal);
-                        modalView.setMessage(item.message);
-                        modalView.setCallback(function () {
-                            setTimeout(function () { return _this.observable.modal = undefined; });
-                            item.callback();
-                        });
-                        !item.isMute && soundPlayer.play(soundPlayer_1.ISoundPlayer.Keys.Popup);
-                        _this.observable.modal = modalView;
-                    });
-                    notifier.forEvent(play_1.IPlay.Event.MuteMusic).listen(playScreen, function (isMute) {
-                        if (_this.isMute !== isMute) {
-                            // // !isMute && soundPlayer.play(ISoundPlayer.Keys.Background) || 
-                            // // soundPlayer.stop(ISoundPlayer.Keys.Background);
-                            _this.isMute = isMute;
-                        }
-                    });
                     playScreen.init(playId, !!_this.isMute);
                     _this.observable.view = playScreen;
                 }
                 else {
                     _this.observable.view = viewProvider.newInstance(home_1.IHome);
+                }
+            });
+            notifier.forEvent(play_1.IPlay.Event.Modal).listen(this, function (playScreen, item) {
+                var modalView = viewProvider.newInstance(modal_1.IModal);
+                modalView.setMessage(item.message);
+                modalView.setCallback(function () {
+                    setTimeout(function () { return _this.observable.modal = undefined; });
+                    item.callback();
+                });
+                !item.isMute && soundPlayer.play(soundPlayer_1.ISoundPlayer.Keys.Popup);
+                _this.observable.modal = modalView;
+                return true;
+            });
+            notifier.forEvent(play_1.IPlay.Event.MuteMusic).listen(this, function (playScreen, isMute) {
+                if (_this.isMute !== isMute) {
+                    // // !isMute && soundPlayer.play(ISoundPlayer.Keys.Background) || 
+                    // // soundPlayer.stop(ISoundPlayer.Keys.Background);
+                    _this.isMute = isMute;
+                    return true;
                 }
             });
         }
@@ -66,7 +66,7 @@ define(["require", "exports", "artiste", "view/home", "view/niveau", "view/play"
                 artiste_1.IRouter,
                 artiste_1.IViewProvider,
                 soundPlayer_1.ISoundPlayer,
-                artiste_1.INotifier])
+                artiste_1.IEventManager])
         ], Startup);
         return Startup;
     }());

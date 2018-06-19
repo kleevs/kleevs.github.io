@@ -20,27 +20,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cycleScheduler"], function (require, exports, artiste_1, app_1, soundPlayer_1, cycleScheduler_1) {
     "use strict";
     exports.__esModule = true;
+    var EngineEvent = /** @class */ (function () {
+        function EngineEvent() {
+            this.callbacks = [];
+        }
+        EngineEvent.prototype.on = function (callback) {
+            var _this = this;
+            this.callbacks.push(callback);
+            return { stop: function () {
+                    _this.callbacks = _this.callbacks.filter(function (c) { return c !== callback; });
+                } };
+        };
+        EngineEvent.prototype.trigger = function (data) {
+            this.callbacks.forEach(function (callback) { return callback(data); });
+        };
+        return EngineEvent;
+    }());
     var IEngine = /** @class */ (function () {
         function IEngine() {
         }
         IEngine.Event = {
-            Modal: new artiste_1.Event("IEngine.Modal"),
-            Sound: new artiste_1.Event("IEngine.Sound"),
-            Cycle: new artiste_1.Event("IEngine.Cycle"),
-            Next: new artiste_1.Event("IEngine.Next")
+            Modal: new EngineEvent(),
+            Sound: new EngineEvent(),
+            Next: new EngineEvent(),
+            Cycle: new EngineEvent()
         };
         return IEngine;
     }());
     exports.IEngine = IEngine;
     var Engine = /** @class */ (function (_super) {
         __extends(Engine, _super);
-        function Engine(app, notifier, cycleScheduler) {
+        function Engine(app, cycleScheduler) {
             var _this = _super.call(this) || this;
             _this.app = app;
-            _this.notifier = notifier;
             _this.cycleScheduler = cycleScheduler;
-            _this.notifier.forEvent(cycleScheduler_1.ICycleScheduler.Event().Cycle).listen(cycleScheduler, function (obj) {
-                _this.notifier.forEvent(IEngine.Event.Cycle).notify(_this, obj);
+            _this.cycleScheduler.on(function (data) {
+                IEngine.Event.Cycle.trigger(data);
             });
             return _this;
         }
@@ -118,7 +133,7 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cy
                         if (tap) {
                             cont = true;
                             cycles.push(function () {
-                                _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Tap);
+                                IEngine.Event.Sound.trigger(soundPlayer_1.ISoundPlayer.Keys.Tap);
                             });
                         }
                     }
@@ -144,7 +159,7 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cy
             }); };
             var next = function () {
                 _this.app.saveNiveau(id, score);
-                _this.notifier.forEvent(IEngine.Event.Next).notify(_this, ++id);
+                IEngine.Event.Next.trigger(++id);
             };
             var back = function () {
                 if (savedStates.length > 0) {
@@ -173,8 +188,8 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cy
                 if (finish()) {
                     isfinished = true;
                     cycles.push(function () {
-                        _this.notifier.forEvent(IEngine.Event.Sound).notify(_this, soundPlayer_1.ISoundPlayer.Keys.Win);
-                        _this.notifier.forEvent(IEngine.Event.Modal).notify(_this, {
+                        IEngine.Event.Sound.trigger(soundPlayer_1.ISoundPlayer.Keys.Win);
+                        IEngine.Event.Modal.trigger({
                             message: "R\u00E9ussi !!! " + score + " coups.",
                             callback: function () {
                                 next();
@@ -217,7 +232,6 @@ define(["require", "exports", "artiste", "app", "soundPlayer", "tools/service/cy
                 key: IEngine
             }),
             __metadata("design:paramtypes", [app_1.IApp,
-                artiste_1.INotifier,
                 cycleScheduler_1.ICycleScheduler])
         ], Engine);
         return Engine;
