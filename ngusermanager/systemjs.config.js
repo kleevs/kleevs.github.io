@@ -1,12 +1,12 @@
 (function (global) {
     System.config({
         paths: {
-            'npm:': '/node_modules/'
+            'npm:': './node_modules/'
         },
 
         map: {
             // maps plain `app` module to `app` package
-            main: 'dist/main.js',
+            main: './dist/main.js',
 
             // angular bundles
             '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
