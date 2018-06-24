@@ -64,6 +64,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                     description: "POC application de gestion des utilisateurs",
                     link: "site web"
                 },
+                ngusermanager: {
+                    description: "POC application de gestion des utilisateurs (Angular version)",
+                    link: "site web"
+                },
                 mail: {
                     description: "POC webmail",
                     link: "site web"
