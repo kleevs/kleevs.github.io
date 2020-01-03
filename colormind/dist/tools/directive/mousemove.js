@@ -23,6 +23,7 @@ define(["require", "exports", "artiste", "jquery"], function (require, exports, 
             return true;
         };
         var event = function (e) {
+            e.preventDefault();
             var x = e.offsetX !== undefined ?
                 e.offsetX : e.touches ?
                 e.touches[0].clientX - $(e.target).offset().left :
